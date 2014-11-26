@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/jasmin.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/fast-md5.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/antlr-3.2.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/bottomup.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/fiji-asm.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/fivmcommon.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/fijirt.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/fijicore.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/fivmc.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/fijiscj.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/fivmr.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/fivmrunner.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/fivmutil.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/hardrtj.jar"/>
+	<classpathentry kind="lib" path="/home/niranjan/fijivm/fivm/lib/rtsj.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
