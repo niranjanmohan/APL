@@ -1,11 +1,11 @@
 package com.aeh;
 
-import javax.realtime.RealtimeThread;
 
 
 public class PObject {
 	boolean isDedicatedFree;
-	RealtimeThread dedicatedThread;
+	DedicatedThread dedicatedThread;
+	DedicatedWatchDog dedicatedWatchDog;
 	volatile int count;
 	
 
