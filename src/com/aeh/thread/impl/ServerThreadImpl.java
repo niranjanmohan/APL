@@ -1,15 +1,10 @@
 package com.aeh.thread.impl;
 
-import com.aeh.commonobjects.Handler;
+import com.aeh.commonobjects.AsyncEventWrapper;
 import com.aeh.thread.ServerThread;
 
 public class ServerThreadImpl implements ServerThread{
 
-	@Override
-	public void executeHandler(Handler handler) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean checkHandlerPQ() {
@@ -18,7 +13,7 @@ public class ServerThreadImpl implements ServerThread{
 	}
 
 	@Override
-	public Handler getHandler(Object o) {
+	public AsyncEventWrapper getHandler(Object o) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -27,6 +22,12 @@ public class ServerThreadImpl implements ServerThread{
 	public boolean checkQ() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void executeHandler(AsyncEventWrapper handler) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
