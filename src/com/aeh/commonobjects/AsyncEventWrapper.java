@@ -9,23 +9,29 @@ import javax.realtime.AsyncEventHandler;
 import com.aeh.AEHHolder;
 
 
-public class AsyncEventWrapper extends AsyncEvent {
-	List<AsyncEventHandler> listHandlers;
+public class AsyncEventWrapper  extends AsyncEvent{
+	volatile static List<AsyncEventHandler> listHandlers;
 	AEHHolder aehHolder;
-	public AsyncEventWrapper(AEHHolder aehHolder) {
-		this.aehHolder = aehHolder;
+
+
+	public AsyncEventWrapper() {
+		//aehHolder = 
 		listHandlers = new ArrayList<AsyncEventHandler>();
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-	@Override
+
+
 	public void addHandler(AsyncEventHandler handler){
-		listHandlers.add(handler);
+		synchronized(AsyncEventWrapper.class){
+			listHandlers.add(handler);
+		}
+		
 	}
-	
-	@Override
+
+
 	public void fire(){
+		
+		
 		//here we have to enqueue update count 
 		for(AsyncEventHandler async: listHandlers)
 			aehHolder.enQueueHandler(async);
