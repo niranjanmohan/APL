@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.realtime.AsyncEventHandler;
 
 import com.aeh.commonobjects.AEHLockUtility;
-import com.aeh.commonobjects.AsyncEventWrapper;
 import com.aeh.commonobjects.LockUtility;
 import com.aeh.commonobjects.PObject;
 import com.aeh.commonobjects.ThreadPool;
@@ -18,11 +18,10 @@ public class AEHHolder {
 	ThreadPool threadPool;
 	Map<Integer,PObject> priorityObjects;
 	PriorityQueue<Integer> pQueue;
-	List<Queue<AsyncEventWrapper>> handlerQueues;
+	List<Queue<AsyncEventHandler>> handlerQueues;
 	LockUtility lockUtil;
 	int priority;
-
-
+	final int priorityCount = 8;
 
 
 	public static AEHHolder getInstance(){
@@ -36,7 +35,12 @@ public class AEHHolder {
 	}
 
 	private AEHHolder(){
+		initialize();
+	}
+	public void initialize(){
 		lockUtil = new AEHLockUtility();
+		priorityObjects = new ConcurrentHashMap<Integer,PObject>();
+		
 	}
 
 	public int getPriority() {
@@ -49,13 +53,17 @@ public class AEHHolder {
 	}
 
 
-
-	public void enQueueHandler(AsyncEventHandler aehHolder){
+	public void enQueueHandler(List<AsyncEventHandler> eventHandlers){
 		//aehHolder
-		lockUtil.getQLock(priority);
-		handlerQueues.get(priority);
-
-
+		if(lockUtil.getQLock(priority)){
+			handlerQueues.get(priority);
+			Queue <AsyncEventHandler> queue = handlerQueues.get(priority);
+			queue.addAll(eventHandlers);
+			lockUtil.releaseQLock(priority);
+			PObject pObject = priorityObjects.get(priority);
+			pObject.getDedicatedThread().notify();
+//			lockUtil.notifyWatchDog(priority);
+		}
 	}
 
 }

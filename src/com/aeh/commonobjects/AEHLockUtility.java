@@ -1,46 +1,50 @@
 package com.aeh.commonobjects;
 
+import com.aeh.AEHHolder;
+
+
 public class AEHLockUtility implements LockUtility{
-
+	AEHHolder aehHolder;
 	@Override
-	public void getQLock(int priority) {
+	public boolean getQLock(int priority) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override
-	public void getPQAndTPLock() {
+	public boolean getPQAndTPLock() {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override
-	public void releasePQAndTPLock() {
+	public boolean releasePQAndTPLock() {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override
-	public void releaseQLock(int priority) {
+	public boolean releaseQLock(int priority) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override
-	public void enqueueHandler(int priority) {
+	public boolean enqueueHandler(int priority) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
-	@Override
-	public void notifyWatchDog(int priority) {
-		// TODO Auto-generated method stub
-		
-	}
+//	@Override
+//	public void notifyWatchDog(int priority) {
+//		
+//		return ;
+//	}
 
 	@Override
-	public void updateCount(int priority) {
+	public boolean updateCount(int priority) {
 		// TODO Auto-generated method stub
+		return false;
 		
 	}
 

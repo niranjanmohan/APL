@@ -10,31 +10,30 @@ import com.aeh.AEHHolder;
 
 
 public class AsyncEventWrapper  extends AsyncEvent{
-	volatile static List<AsyncEventHandler> listHandlers;
+	List<AsyncEventHandler> handlers;
 	AEHHolder aehHolder;
 
 
 	public AsyncEventWrapper() {
 		//aehHolder = 
-		listHandlers = new ArrayList<AsyncEventHandler>();
+		handlers = new ArrayList<AsyncEventHandler>();
+		aehHolder = AEHHolder.getInstance();
 		// TODO Auto-generated constructor stub
 	}
 
 
 	public void addHandler(AsyncEventHandler handler){
 		synchronized(AsyncEventWrapper.class){
-			listHandlers.add(handler);
+			handlers.add(handler);
 		}
 		
 	}
 
 
 	public void fire(){
-		
-		
+		aehHolder.enQueueHandler(handlers);
 		//here we have to enqueue update count 
-		for(AsyncEventHandler async: listHandlers)
-			aehHolder.enQueueHandler(async);
+		
 	}
 
 }
