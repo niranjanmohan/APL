@@ -1,10 +1,10 @@
 package com.aeh;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.realtime.AsyncEventHandler;
 
@@ -17,6 +17,15 @@ public class AEHHolder {
 	private static volatile AEHHolder instance;
 	ThreadPool threadPool;
 	Map<Integer,PObject> priorityObjects;
+	public Map<Integer, PObject> getPriorityObjects() {
+		return priorityObjects;
+	}
+
+	public void setPriorityObjects(Map<Integer, PObject> priorityObjects) {
+		this.priorityObjects = priorityObjects;
+	}
+
+
 	PriorityQueue<Integer> pQueue;
 	List<Queue<AsyncEventHandler>> handlerQueues;
 	LockUtility lockUtil;
@@ -39,8 +48,9 @@ public class AEHHolder {
 	}
 	public void initialize(){
 		lockUtil = new AEHLockUtility();
-		priorityObjects = new ConcurrentHashMap<Integer,PObject>();
-		
+		priorityObjects = new HashMap<Integer,PObject>();
+		//start all the threads and 
+
 	}
 
 	public int getPriority() {
@@ -60,9 +70,13 @@ public class AEHHolder {
 			Queue <AsyncEventHandler> queue = handlerQueues.get(priority);
 			queue.addAll(eventHandlers);
 			lockUtil.releaseQLock(priority);
-			PObject pObject = priorityObjects.get(priority);
-			pObject.getDedicatedThread().notify();
-//			lockUtil.notifyWatchDog(priority);
+			PObject pObject;
+			System.out.println("Entering synchronized block");
+			synchronized(pObject = priorityObjects.get(priority)){
+				pObject.setCount(pObject.getCount()+1);
+				pObject.getDedicatedThread().notify();
+			}
+			//			lockUtil.notifyWatchDog(priority);
 		}
 	}
 

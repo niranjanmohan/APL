@@ -31,8 +31,10 @@ public class AsyncEventWrapper  extends AsyncEvent{
 
 
 	public void fire(){
+		System.out.println("called file enque handlers");
 		aehHolder.enQueueHandler(handlers);
 		//here we have to enqueue update count 
+		System.out.println("finifhed enqueue handler");
 		
 	}
 

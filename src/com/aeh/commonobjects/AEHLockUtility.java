@@ -7,6 +7,8 @@ public class AEHLockUtility implements LockUtility{
 	AEHHolder aehHolder;
 	@Override
 	public boolean getQLock(int priority) {
+		System.out.println("test code from AEHlockutil need to implement ");
+	
 		// TODO Auto-generated method stub
 		return false;
 	}
