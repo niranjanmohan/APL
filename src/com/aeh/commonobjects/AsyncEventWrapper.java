@@ -23,17 +23,23 @@ public class AsyncEventWrapper  extends AsyncEvent{
 		aehHolder = AEHHolder.getInstance();
 		// TODO Auto-generated constructor stub
 	}
+	
+	
+	public int getPriority(){
+		return this.priority;
+	}
 
 	
-	private void changePriority(AsyncEventHandler handler){
+	private void setPriority(AsyncEventHandler handler){
 		PriorityParameters sp = new PriorityParameters();
-		sp.setPriority(this.priority);
+		int priority = this.getPriority()>aehHolder.getPriorityCount()?aehHolder.getPriorityCount():this.getPriority();
+		sp.setPriority(priority);
 		handler.setSchedulingParameters(sp);
 	}
 	
 
 	public void addHandler(AsyncEventHandler handler){
-		this.changePriority(handler);
+		this.setPriority(handler);
 		synchronized(AsyncEventWrapper.class){
 			handlers.add(handler);
 		}
