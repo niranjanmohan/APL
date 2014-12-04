@@ -7,6 +7,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import javax.realtime.AsyncEventHandler;
+import javax.realtime.PriorityParameters;
 
 import com.aeh.commonobjects.AEHLockUtility;
 import com.aeh.commonobjects.LockUtility;
@@ -17,6 +18,50 @@ public class AEHHolder {
 	private static volatile AEHHolder instance;
 	ThreadPool threadPool;
 	Map<Integer,PObject> priorityObjects;
+	PriorityQueue<Integer> pQueue;
+	List<Queue<AsyncEventHandler>> handlerQueues;
+
+	LockUtility lockUtil;
+	final int priorityCount;
+	
+	private AEHHolder(){
+		priorityCount = 8;
+		initialize();
+	}
+	public void initialize(){
+		lockUtil = new AEHLockUtility();
+		priorityObjects = new HashMap<Integer,PObject>();
+
+	}
+	
+	
+	
+	public ThreadPool getThreadPool() {
+		return threadPool;
+	}
+
+	public void setThreadPool(ThreadPool threadPool) {
+		this.threadPool = threadPool;
+	}
+
+	public PriorityQueue<Integer> getpQueue() {
+		return pQueue;
+	}
+
+	public void setpQueue(PriorityQueue<Integer> pQueue) {
+		this.pQueue = pQueue;
+	}
+
+	public List<Queue<AsyncEventHandler>> getHandlerQueues() {
+		return handlerQueues;
+	}
+
+	public void setHandlerQueues(List<Queue<AsyncEventHandler>> handlerQueues) {
+		this.handlerQueues = handlerQueues;
+	}
+
+
+	
 	public Map<Integer, PObject> getPriorityObjects() {
 		return priorityObjects;
 	}
@@ -26,12 +71,9 @@ public class AEHHolder {
 	}
 
 
-	PriorityQueue<Integer> pQueue;
-	List<Queue<AsyncEventHandler>> handlerQueues;
-	LockUtility lockUtil;
-	int priority;
-	final int priorityCount = 8;
-
+	public int getPriorityCount() {
+		return priorityCount;
+	}
 
 	public static AEHHolder getInstance(){
 		if(instance == null){
@@ -43,28 +85,12 @@ public class AEHHolder {
 		return instance;
 	}
 
-	private AEHHolder(){
-		initialize();
-	}
-	public void initialize(){
-		lockUtil = new AEHLockUtility();
-		priorityObjects = new HashMap<Integer,PObject>();
-		//start all the threads and 
-
-	}
-
-	public int getPriority() {
-		return priority;
-	}
-
-
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
 
 
 	public void enQueueHandler(List<AsyncEventHandler> eventHandlers){
 		//aehHolder
+		PriorityParameters param = (PriorityParameters)eventHandlers.get(0).getSchedulingParameters();
+		int priority = param.getPriority();
 		if(lockUtil.getQLock(priority)){
 			handlerQueues.get(priority);
 			Queue <AsyncEventHandler> queue = handlerQueues.get(priority);
