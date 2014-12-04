@@ -13,6 +13,11 @@ import com.aeh.commonobjects.AEHLockUtility;
 import com.aeh.commonobjects.LockUtility;
 import com.aeh.commonobjects.PObject;
 import com.aeh.commonobjects.ThreadPool;
+import com.aeh.thread.DedicatedWatchDog;
+import com.aeh.thread.ServerThread;
+import com.aeh.thread.impl.DedicatedThread;
+import com.aeh.thread.impl.DedicatedWatchDogImpl;
+import com.aeh.thread.impl.ServerThreadImpl;
 
 public class AEHHolder {
 	private static volatile AEHHolder instance;
@@ -31,10 +36,19 @@ public class AEHHolder {
 	public void initialize(){
 		lockUtil = new AEHLockUtility();
 		priorityObjects = new HashMap<Integer,PObject>();
+		//instantiate each priority object
+		for(int i=0;i<priorityCount;i++){
+			PObject pobject = new PObject(i);
+			pobject.setDedicatedFree(true);
+			pobject.setCount(0);
+			DedicatedWatchDog dedicatedWatchDog = new DedicatedWatchDogImpl();
+			DedicatedThread dedicatedServerThread = new DedicatedThread();
+			pobject.setDedicatedThread(dedicatedServerThread);
+			pobject.setDedicatedWatchDog(dedicatedWatchDog);
+			priorityObjects.put(i, pobject);
+		}
 
 	}
-	
-	
 	
 	public ThreadPool getThreadPool() {
 		return threadPool;
@@ -73,6 +87,12 @@ public class AEHHolder {
 
 	public int getPriorityCount() {
 		return priorityCount;
+	}
+	public Queue<AsyncEventHandler> getQueue(int priority){
+		return handlerQueues.get(priority);
+	}
+	public void setQueue(int index,Queue<AsyncEventHandler> queue){
+		handlerQueues.set(index, queue);
 	}
 
 	public static AEHHolder getInstance(){
