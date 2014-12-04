@@ -32,7 +32,7 @@ public class AsyncEventWrapper  extends AsyncEvent{
 	
 	private void setPriority(AsyncEventHandler handler){
 		PriorityParameters sp = new PriorityParameters();
-		int priority = this.getPriority()>aehHandler.getPriorityCount()?aehHandler.getPriorityCount():this.getPriority();
+		int priority = this.getPriority()>aehHolder.getPriorityCount()?aehHolder.getPriorityCount():this.getPriority();
 		sp.setPriority(priority);
 		handler.setSchedulingParameters(sp);
 	}
