@@ -1,20 +1,21 @@
 package com.aeh.commonobjects;
 
-import com.aeh.AEHHolder;
 
 
 public class AEHLockUtility implements LockUtility{
-	private static 
 	
 	
-	class AEHHelper{
-		private static AEHLockUtility INSTANCE;
+	private static class AEHHelper{
+		private static AEHLockUtility INSTANCE = new AEHLockUtility();
 	}
 	
-	public AEHLockUtility getInstance(){
+	private AEHLockUtility(){
+		
+	}
+	
+	public static  AEHLockUtility getInstance(){
 		return AEHHelper.INSTANCE;
 	}
-	
 	
 	
 	@Override

@@ -34,7 +34,6 @@ public class AEHHolder {
 		initialize();
 	}
 	public void initialize(){
-		lockUtil = new AEHLockUtility();
 		priorityObjects = new HashMap<Integer,PObject>();
 		//instantiate each priority object
 		for(int i=0;i<priorityCount;i++){
