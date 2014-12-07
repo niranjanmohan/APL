@@ -13,7 +13,7 @@ public class AEHLockUtility {
 		private static AEHLockUtility INSTANCE;
 	}
 	
-	public AEHLockUtility getInstance(){
+	public static AEHLockUtility getInstance(){
 		return AEHHelper.INSTANCE;
 	}
 	
@@ -48,21 +48,5 @@ public class AEHLockUtility {
 		notify();
 	}
 
-	public boolean enqueueHandler(int priority) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-//	@Override
-//	public void notifyWatchDog(int priority) {
-//		
-//		return ;
-//	}
-
-	public boolean updateCount(int priority) {
-		// TODO Auto-generated method stub
-		return false;
-		
-	}
 
 }

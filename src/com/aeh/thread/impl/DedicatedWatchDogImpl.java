@@ -2,7 +2,6 @@ package com.aeh.thread.impl;
 
 import com.aeh.AEHHolder;
 import com.aeh.commonobjects.AEHLockUtility;
-import com.aeh.commonobjects.LockUtility;
 import com.aeh.commonobjects.PObject;
 import com.aeh.thread.DedicatedWatchDog;
 import com.aeh.thread.ServerThread;
@@ -10,7 +9,7 @@ import com.aeh.thread.ServerThread;
 public class DedicatedWatchDogImpl implements DedicatedWatchDog{
 	int priority;
 	AEHHolder aehHolder;
-	LockUtility lockUtility;
+	AEHLockUtility aehLockUtility;
 	public int getPriority() {
 		return priority;
 	}
@@ -21,7 +20,7 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog{
 	public void initiateProcess() {
 		// TODO Auto-generated method stub
 		aehHolder = AEHHolder.getInstance();
-		lockUtility = AEHLockUtility.getInstance();
+		aehLockUtility = AEHLockUtility.getInstance();
 	}
 	@Override
 	public void run() {
@@ -37,7 +36,12 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog{
 				pObject.count.decrementAndGet();
 				//search for Threads if no threads found insert priority into priority Q
 				//need to get lock for the operation
-				lockUtility.getPQAndTPLock();
+				try {
+					aehLockUtility.getPQAndTPLock();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(aehHolder.isThreadPoolEmpty()){
 					//enque the value in the PQ
 					aehHolder.getpQueue().add(priority);
@@ -48,7 +52,7 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog{
 					serverThread.setHandlerPriority(priority);
 					serverThread.start();
 				}
-				lockUtility.releasePQAndTPLock();
+				aehLockUtility.releasePQAndTPLock();
 			}
 		}
 	}

@@ -44,7 +44,9 @@ public class HelloWorld {
 
 
 		NoHeapRealtimeThread nh = new NoHeapRealtimeThread(r1);
+		nh.setPriority(1);
 		NoHeapRealtimeThread nh2 = new NoHeapRealtimeThread(r2);
+		nh2.setPriority(5);
 		nh.start();
 		nh2.start();
 

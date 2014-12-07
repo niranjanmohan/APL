@@ -1,5 +1,7 @@
 package com.aeh.thread.impl;
 
+import javax.realtime.RealtimeThread;
+
 import com.aeh.commonobjects.AsyncEventWrapper;
 import com.aeh.thread.ServerThread;
 
@@ -34,6 +36,36 @@ public class DedicatedThread implements ServerThread {
 
 	@Override
 	public void executeHandler(AsyncEventWrapper handler) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setHandlerPriority(int priority) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getHandlerPriority() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public RealtimeThread getRealTimeThread() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setRealTimeThread(RealtimeThread realTimeThread) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void start() {
 		// TODO Auto-generated method stub
 		
 	}

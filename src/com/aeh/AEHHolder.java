@@ -9,7 +9,7 @@ import java.util.Queue;
 import javax.realtime.AsyncEventHandler;
 import javax.realtime.PriorityParameters;
 
-import com.aeh.commonobjects.LockUtility;
+import com.aeh.commonobjects.AEHLockUtility;
 import com.aeh.commonobjects.PObject;
 import com.aeh.thread.DedicatedWatchDog;
 import com.aeh.thread.ServerThread;
@@ -18,16 +18,16 @@ import com.aeh.thread.impl.DedicatedWatchDogImpl;
 
 public class AEHHolder {
 	private static volatile AEHHolder instance;
-	
+
 
 
 	Queue<ServerThread> threadPoolQ;
 	Map<Integer,PObject> priorityObjects;
 	PriorityQueue<Integer> pQueue;
 	List<Queue<AsyncEventHandler>> handlerQueues;
-	LockUtility lockUtil;
+	AEHLockUtility lockUtil;
 	final int priorityCount;
-	
+
 	private AEHHolder(){
 		priorityCount = 8;
 		initialize();
@@ -46,7 +46,7 @@ public class AEHHolder {
 		}
 
 	}
-	
+
 
 	public Queue<ServerThread> getThreadPoolQ() {
 		return threadPoolQ;
@@ -72,7 +72,7 @@ public class AEHHolder {
 	}
 
 
-	
+
 	public Map<Integer, PObject> getPriorityObjects() {
 		return priorityObjects;
 	}
@@ -104,46 +104,34 @@ public class AEHHolder {
 	public boolean isThreadPoolEmpty(){
 		return threadPoolQ.isEmpty();
 	}
-	
+
 	public ServerThread getThreadFromThreadPool(){
 		return threadPoolQ.poll();
 	}
-	
+
 
 	public void enQueueHandler(List<AsyncEventHandler> eventHandlers){
 		//aehHolder
 		PriorityParameters param = (PriorityParameters)eventHandlers.get(0).getSchedulingParameters();
 		int priority = param.getPriority();
-		if(lockUtil.getQLock(priority)){
-			handlerQueues.get(priority);
-			Queue <AsyncEventHandler> queue = handlerQueues.get(priority);
-			queue.addAll(eventHandlers);
-			lockUtil.releaseQLock(priority);
-			PObject pObject;
-			System.out.println("Entering synchronized block");
-			synchronized(pObject = priorityObjects.get(priority)){
-				pObject.count.incrementAndGet();
-				pObject.getDedicatedThread().notify();
-			}
-			//			lockUtil.notifyWatchDog(priority);
+		try {
+			lockUtil.getQLock(priority);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		handlerQueues.get(priority);
+		Queue <AsyncEventHandler> queue = handlerQueues.get(priority);
+		queue.addAll(eventHandlers);
+		lockUtil.releaseQLock(priority);
+		PObject pObject;
+		System.out.println("Entering synchronized block");
+		synchronized(pObject = priorityObjects.get(priority)){
+			pObject.count.incrementAndGet();
+			pObject.getDedicatedThread().notify();
+		}
+		//			lockUtil.notifyWatchDog(priority);
+
 	}
 
 }
-
-
-/*
-	private static volatile AEHHolder instance = null;
-	public static AEHHolder getInstance(){
-		AEHHolder temp = instance;
-		if(temp == null){
-			synchronized(AEHHolder.class){
-				instance = new AEHHolder(); 
-			}
-		}
-		return instance;
-	}
-	private AEHHolder(){
-
-	}
- */

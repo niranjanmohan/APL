@@ -49,29 +49,28 @@ public class ServerThreadImpl implements ServerThread{
 	public int getHandlerPriority() {
 		// TODO Auto-generated method stub
 		return realTimeThread.getPriority();
+
+
 	}
 
 
+	@Override
 	public RealtimeThread getRealTimeThread() {
-		return realTimeThread;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
+	@Override
 	public void setRealTimeThread(RealtimeThread realTimeThread) {
-		this.realTimeThread = realTimeThread;
+		// TODO Auto-generated method stub
+
 	}
-	
+
+
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
-		//get the PQ lock 
-		
-		
-		realTimeThread.start();
-		
 	}
 
-
-	
-	
 }
