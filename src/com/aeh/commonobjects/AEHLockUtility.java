@@ -4,7 +4,19 @@ import com.aeh.AEHHolder;
 
 
 public class AEHLockUtility implements LockUtility{
-	AEHHolder aehHolder;
+	private static 
+	
+	
+	class AEHHelper{
+		private static AEHLockUtility INSTANCE;
+	}
+	
+	public AEHLockUtility getInstance(){
+		return AEHHelper.INSTANCE;
+	}
+	
+	
+	
 	@Override
 	public boolean getQLock(int priority) {
 		System.out.println("test code from AEHlockutil need to implement ");

@@ -22,7 +22,10 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog{
 		System.out.println("Enter the Dedicated thread for priority ----->"+priority);
 		//get the count 
 		while(true){
+			//AEHgetPQAndTPLock();
 			System.out.println("the priority is   :"+ aehHolder.getPriorityObjects().get(priority).getCount());
+			int count = aehHolder.getPriorityObjects().get(priority).getCount();
+			
 		}
 	}
 	

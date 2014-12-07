@@ -1,16 +1,4 @@
 
-niranjan@~/APL/fijitest$ ls -ltr
-total 4
--rw-rw-r-- 1 niranjan niranjan 949 Dec  1 16:59 HelloWorld.java
-niranjan@~/APL/fijitest$ javac -cp ~/fijivm/fivm/lib/rtsj.jar HelloWorld.java 
-niranjan@~/APL/fijitest$ ls -ltr
-total 16
--rw-rw-r-- 1 niranjan niranjan 949 Dec  1 16:59 HelloWorld.java
--rw-rw-r-- 1 niranjan niranjan 766 Dec  1 17:14 HelloWorld.class
--rw-rw-r-- 1 niranjan niranjan 740 Dec  1 17:14 HelloWorld$2.class
--rw-rw-r-- 1 niranjan niranjan 741 Dec  1 17:14 HelloWorld$1.class
-niranjan@~/APL/fijitest$ fivmc -o HelloWorld *.class ~/fijivm/fivm/l
-lib/      localbin/ 
 niranjan@~/APL/fijitest$ fivmc -o HelloWorld *.class ~/fijivm/fivm/lib/rtsj.jar 
 niranjan@~/APL/fijitest$ ls -ltr
 total 8012
@@ -28,3 +16,10 @@ thread 2 thread 2
  thread 1 thread 1
 thread 2 thread 2
  thread 1 thread 1
+ 
+ 
+ 
+*******************************************************************************************************************************************
+********************************Running our program************************************************************************************************************
+********************************************************************************************************************************************
+ fivmc -m com/aeh/test/Driver -o Driver aeh.jar ~/fijivm/fivm/lib/rtsj.jar 
