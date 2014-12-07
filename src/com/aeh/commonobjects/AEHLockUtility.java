@@ -1,13 +1,15 @@
 package com.aeh.commonobjects;
 
-import com.aeh.AEHHolder;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class AEHLockUtility implements LockUtility{
-	private static 
+public class AEHLockUtility {
 	
+	List<Boolean> qLockList = new ArrayList<Boolean>();
+	private boolean pqtpLock = false;
 	
-	class AEHHelper{
+	private static class AEHHelper{
 		private static AEHLockUtility INSTANCE;
 	}
 	
@@ -15,35 +17,37 @@ public class AEHLockUtility implements LockUtility{
 		return AEHHelper.INSTANCE;
 	}
 	
+	public void initializeQLock(int no){
+		for(int i=0; i<no; i++){
+			qLockList.add(false);
+		}
+	}
 	
-	
-	@Override
-	public boolean getQLock(int priority) {
+	public synchronized void getQLock(int priority) throws InterruptedException {
 		System.out.println("test code from AEHlockutil need to implement ");
-	
-		// TODO Auto-generated method stub
-		return false;
+		while(qLockList.get(priority)){
+			wait();
+		}
+		qLockList.set(priority,true);
 	}
 
-	@Override
-	public boolean getPQAndTPLock() {
-		// TODO Auto-generated method stub
-		return false;
+	public synchronized void getPQAndTPLock() throws InterruptedException {
+		while(pqtpLock){
+			wait();
+		}
+		pqtpLock = true;
 	}
 
-	@Override
-	public boolean releasePQAndTPLock() {
-		// TODO Auto-generated method stub
-		return false;
+	public synchronized void releasePQAndTPLock() {
+		pqtpLock = false;
+		notify();
 	}
 
-	@Override
-	public boolean releaseQLock(int priority) {
-		// TODO Auto-generated method stub
-		return false;
+	public synchronized void releaseQLock(int priority) {
+		qLockList.set(priority,false);
+		notify();
 	}
 
-	@Override
 	public boolean enqueueHandler(int priority) {
 		// TODO Auto-generated method stub
 		return false;
@@ -55,7 +59,6 @@ public class AEHLockUtility implements LockUtility{
 //		return ;
 //	}
 
-	@Override
 	public boolean updateCount(int priority) {
 		// TODO Auto-generated method stub
 		return false;
