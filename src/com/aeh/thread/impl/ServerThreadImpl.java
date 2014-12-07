@@ -1,39 +1,29 @@
 package com.aeh.thread.impl;
 
-import javax.realtime.RealtimeThread;
+import javax.realtime.NoHeapRealtimeThread;
 
 import com.aeh.commonobjects.AsyncEventWrapper;
 import com.aeh.thread.ServerThread;
 
 public class ServerThreadImpl implements ServerThread{
-	RealtimeThread realTimeThread;
+	NoHeapRealtimeThread noHeapRealTimeThread;
 
 
 	public ServerThreadImpl() {
-		realTimeThread = new RealtimeThread();
+		noHeapRealTimeThread = new NoHeapRealtimeThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				//execute the code for the handler inside this
+				
+			}
+		});
 		// TODO Auto-generated constructor stub
 	}
 
 
-	@Override
-	public boolean checkHandlerPQ() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
-	@Override
-	public AsyncEventWrapper getHandler(Object o) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public boolean checkQ() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void executeHandler(AsyncEventWrapper handler) {
 		// TODO Auto-generated method stub
 
@@ -41,29 +31,15 @@ public class ServerThreadImpl implements ServerThread{
 
 	@Override
 	public void setHandlerPriority(int priority) {
-		realTimeThread.setPriority(priority);
+		noHeapRealTimeThread.setPriority(priority);
 
 	}
 
 	@Override
 	public int getHandlerPriority() {
 		// TODO Auto-generated method stub
-		return realTimeThread.getPriority();
+		return noHeapRealTimeThread.getPriority();
 
-
-	}
-
-
-	@Override
-	public RealtimeThread getRealTimeThread() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public void setRealTimeThread(RealtimeThread realTimeThread) {
-		// TODO Auto-generated method stub
 
 	}
 
