@@ -1,5 +1,7 @@
 package com.aeh.thread;
 
+import javax.realtime.RealtimeThread;
+
 import com.aeh.commonobjects.AsyncEventWrapper;
 
 public interface ServerThread {
@@ -8,4 +10,9 @@ public interface ServerThread {
 	public boolean checkHandlerPQ();
 	public AsyncEventWrapper getHandler(Object o);
 	public boolean checkQ();
+	public void setHandlerPriority(int priority);
+	public int getHandlerPriority();
+	public RealtimeThread getRealTimeThread();
+	public void setRealTimeThread(RealtimeThread realTimeThread);
+	public void start();
 }

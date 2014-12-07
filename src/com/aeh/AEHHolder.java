@@ -9,23 +9,22 @@ import java.util.Queue;
 import javax.realtime.AsyncEventHandler;
 import javax.realtime.PriorityParameters;
 
-import com.aeh.commonobjects.AEHLockUtility;
 import com.aeh.commonobjects.LockUtility;
 import com.aeh.commonobjects.PObject;
-import com.aeh.commonobjects.ThreadPool;
 import com.aeh.thread.DedicatedWatchDog;
 import com.aeh.thread.ServerThread;
 import com.aeh.thread.impl.DedicatedThread;
 import com.aeh.thread.impl.DedicatedWatchDogImpl;
-import com.aeh.thread.impl.ServerThreadImpl;
 
 public class AEHHolder {
 	private static volatile AEHHolder instance;
-	ThreadPool threadPool;
+	
+
+
+	Queue<ServerThread> threadPoolQ;
 	Map<Integer,PObject> priorityObjects;
 	PriorityQueue<Integer> pQueue;
 	List<Queue<AsyncEventHandler>> handlerQueues;
-
 	LockUtility lockUtil;
 	final int priorityCount;
 	
@@ -39,7 +38,6 @@ public class AEHHolder {
 		for(int i=0;i<priorityCount;i++){
 			PObject pobject = new PObject(i);
 			pobject.setDedicatedFree(true);
-			pobject.setCount(0);
 			DedicatedWatchDog dedicatedWatchDog = new DedicatedWatchDogImpl();
 			DedicatedThread dedicatedServerThread = new DedicatedThread();
 			pobject.setDedicatedThread(dedicatedServerThread);
@@ -49,12 +47,12 @@ public class AEHHolder {
 
 	}
 	
-	public ThreadPool getThreadPool() {
-		return threadPool;
-	}
 
-	public void setThreadPool(ThreadPool threadPool) {
-		this.threadPool = threadPool;
+	public Queue<ServerThread> getThreadPoolQ() {
+		return threadPoolQ;
+	}
+	public void setThreadPoolQ(Queue<ServerThread> threadPoolQ) {
+		this.threadPoolQ = threadPoolQ;
 	}
 
 	public PriorityQueue<Integer> getpQueue() {
@@ -103,8 +101,14 @@ public class AEHHolder {
 		}
 		return instance;
 	}
-
-
+	public boolean isThreadPoolEmpty(){
+		return threadPoolQ.isEmpty();
+	}
+	
+	public ServerThread getThreadFromThreadPool(){
+		return threadPoolQ.poll();
+	}
+	
 
 	public void enQueueHandler(List<AsyncEventHandler> eventHandlers){
 		//aehHolder
@@ -118,7 +122,7 @@ public class AEHHolder {
 			PObject pObject;
 			System.out.println("Entering synchronized block");
 			synchronized(pObject = priorityObjects.get(priority)){
-				pObject.setCount(pObject.getCount()+1);
+				pObject.count.incrementAndGet();
 				pObject.getDedicatedThread().notify();
 			}
 			//			lockUtil.notifyWatchDog(priority);
