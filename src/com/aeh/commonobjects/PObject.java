@@ -17,7 +17,7 @@ public class PObject {
 	public PObject(int priority){
 		isDedicatedFree = true;
 		dedicatedThread = new DedicatedThread();
-		dedicatedThread.setPriority(priority);
+		//dedicatedThread.setPriority(priority);
 		dedicatedWatchDog = new DedicatedWatchDogImpl();
 		dedicatedWatchDog.setPriority(priority);
 		count = new AtomicInteger(0);

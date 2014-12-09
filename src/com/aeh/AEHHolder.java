@@ -6,12 +6,10 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import javax.realtime.AsyncEventHandler;
-import javax.realtime.PriorityParameters;
-
 import com.aeh.commonobjects.AEHLockUtility;
 import com.aeh.commonobjects.PObject;
 import com.aeh.thread.DedicatedWatchDog;
+import com.aeh.thread.AEHandler;
 import com.aeh.thread.ServerThread;
 import com.aeh.thread.impl.DedicatedThread;
 import com.aeh.thread.impl.DedicatedWatchDogImpl;
@@ -24,7 +22,7 @@ public class AEHHolder {
 	Queue<ServerThread> threadPoolQ;
 	Map<Integer,PObject> priorityObjects;
 	PriorityQueue<Integer> pQueue;
-	List<Queue<AsyncEventHandler>> handlerQueues;
+	List<Queue<AEHandler>> handlerQueues;
 	AEHLockUtility lockUtil;
 	final int priorityCount;
 
@@ -63,11 +61,11 @@ public class AEHHolder {
 		this.pQueue = pQueue;
 	}
 
-	public List<Queue<AsyncEventHandler>> getHandlerQueues() {
+	public List<Queue<AEHandler>> getHandlerQueues() {
 		return handlerQueues;
 	}
 
-	public void setHandlerQueues(List<Queue<AsyncEventHandler>> handlerQueues) {
+	public void setHandlerQueues(List<Queue<AEHandler>> handlerQueues) {
 		this.handlerQueues = handlerQueues;
 	}
 
@@ -85,10 +83,10 @@ public class AEHHolder {
 	public int getPriorityCount() {
 		return priorityCount;
 	}
-	public Queue<AsyncEventHandler> getQueue(int priority){
+	public Queue<AEHandler> getQueue(int priority){
 		return handlerQueues.get(priority);
 	}
-	public void setQueue(int index,Queue<AsyncEventHandler> queue){
+	public void setQueue(int index,Queue<AEHandler> queue){
 		handlerQueues.set(index, queue);
 	}
 
@@ -110,10 +108,9 @@ public class AEHHolder {
 	}
 
 
-	public void enQueueHandler(List<AsyncEventHandler> eventHandlers){
+	public void enQueueHandler(List<AEHandler> eventHandlers){
 		//aehHolder
-		PriorityParameters param = (PriorityParameters)eventHandlers.get(0).getSchedulingParameters();
-		int priority = param.getPriority();
+		int priority = eventHandlers.get(0).getPriority();
 		try {
 			lockUtil.getQLock(priority);
 		} catch (InterruptedException e) {
@@ -121,7 +118,7 @@ public class AEHHolder {
 			e.printStackTrace();
 		}
 		handlerQueues.get(priority);
-		Queue <AsyncEventHandler> queue = handlerQueues.get(priority);
+		Queue <AEHandler> queue = handlerQueues.get(priority);
 		queue.addAll(eventHandlers);
 		lockUtil.releaseQLock(priority);
 		PObject pObject;

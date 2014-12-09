@@ -2,51 +2,46 @@ package com.aeh.thread.impl;
 
 import javax.realtime.NoHeapRealtimeThread;
 
-import com.aeh.commonobjects.AsyncEventWrapper;
+import com.aeh.thread.AEHandler;
 import com.aeh.thread.ServerThread;
 
 public class ServerThreadImpl implements ServerThread{
 	NoHeapRealtimeThread noHeapRealTimeThread;
-
+	AEHandler aeHandler;
 
 	public ServerThreadImpl() {
 		noHeapRealTimeThread = new NoHeapRealtimeThread(new Runnable() {
 			
 			@Override
 			public void run() {
-				//execute the code for the handler inside this
-				
+				aeHandler.handlerLogic();
 			}
 		});
-		// TODO Auto-generated constructor stub
+	}
+	
+	public void bindHandler(AEHandler handler){
+		aeHandler = handler;
+		setThreadPriority(aeHandler.getPriority());
 	}
 
-
-
-
-	public void executeHandler(AsyncEventWrapper handler) {
-		// TODO Auto-generated method stub
-
+	public void executeHandler() {
+		start();
+		// TODO execute handler and check what to do 
 	}
 
 	@Override
-	public void setHandlerPriority(int priority) {
+	public void setThreadPriority(int priority) {
 		noHeapRealTimeThread.setPriority(priority);
-
 	}
 
 	@Override
 	public int getHandlerPriority() {
-		// TODO Auto-generated method stub
 		return noHeapRealTimeThread.getPriority();
-
-
 	}
-
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
+		noHeapRealTimeThread.start();
 	}
 
 }

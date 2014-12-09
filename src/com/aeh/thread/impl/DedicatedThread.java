@@ -8,7 +8,7 @@ int priority;
 
 
 	@Override
-	public void setHandlerPriority(int priority) {
+	public void setThreadPriority(int priority) {
 		// TODO Auto-generated method stub
 		
 	}

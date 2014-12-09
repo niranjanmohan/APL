@@ -49,7 +49,7 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog{
 				else{
 					//if thread pool is not empty get thread from thread pool and give a priority
 					ServerThread serverThread = aehHolder.getThreadFromThreadPool();
-					serverThread.setHandlerPriority(priority);
+					serverThread.setThreadPriority(priority);
 					serverThread.start();
 				}
 				aehLockUtility.releasePQAndTPLock();

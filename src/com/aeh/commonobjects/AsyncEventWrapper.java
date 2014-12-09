@@ -1,24 +1,22 @@
 package com.aeh.commonobjects;
 
+import com.aeh.thread.AEHandler;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.realtime.AsyncEvent;
-import javax.realtime.AsyncEventHandler;
-import javax.realtime.PriorityParameters;
-
 import com.aeh.AEHHolder;
 
 
 public class AsyncEventWrapper  extends AsyncEvent{
-	List<AsyncEventHandler> handlers;
+	List<AEHandler> handlers;
 	AEHHolder aehHolder;
 	int priority;
 
 
 	public AsyncEventWrapper(int priority) {
 		//aehHolder = 
-		handlers = new ArrayList<AsyncEventHandler>();
+		handlers = new ArrayList<AEHandler>();
 		this.priority = priority;
 		aehHolder = AEHHolder.getInstance();
 		// TODO Auto-generated constructor stub
@@ -30,15 +28,12 @@ public class AsyncEventWrapper  extends AsyncEvent{
 	}
 
 	
-	private void setPriority(AsyncEventHandler handler){
-		PriorityParameters sp = new PriorityParameters();
-		int priority = this.getPriority()>aehHolder.getPriorityCount()?aehHolder.getPriorityCount():this.getPriority();
-		sp.setPriority(priority);
-		handler.setSchedulingParameters(sp);
+	private void setPriority(AEHandler handler){
+		handler.setPriority(priority);
 	}
 	
 
-	public void addHandler(AsyncEventHandler handler){
+	public void addHandler(AEHandler handler){
 		this.setPriority(handler);
 		synchronized(AsyncEventWrapper.class){
 			handlers.add(handler);
