@@ -9,6 +9,9 @@ public class AEHandlerImpl implements AEHandler {
 		priority = p;
 	}
 	
+	public AEHandlerImpl(){
+	}
+	
 	@Override
 	public void handlerLogic(){
 		System.out.println("priority = "+priority);

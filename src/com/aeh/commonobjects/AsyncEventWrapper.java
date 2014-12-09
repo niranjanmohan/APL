@@ -11,14 +11,16 @@ import com.aeh.AEHHolder;
 public class AsyncEventWrapper  extends AsyncEvent{
 	List<AEHandler> handlers;
 	AEHHolder aehHolder;
+	AEHLockUtility lockUtil;
 	int priority;
-
+	
 
 	public AsyncEventWrapper(int priority) {
 		//aehHolder = 
 		handlers = new ArrayList<AEHandler>();
 		this.priority = priority;
 		aehHolder = AEHHolder.getInstance();
+		lockUtil = aehHolder.getLockUtil();
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -40,8 +42,8 @@ public class AsyncEventWrapper  extends AsyncEvent{
 		}
 		
 	}
-
-
+	
+	
 	public void fire(){
 		System.out.println("called file enque handlers");
 		aehHolder.enQueueHandler(handlers);

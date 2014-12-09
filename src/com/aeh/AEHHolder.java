@@ -1,6 +1,7 @@
 package com.aeh;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -13,36 +14,64 @@ import com.aeh.thread.AEHandler;
 import com.aeh.thread.ServerThread;
 import com.aeh.thread.impl.DedicatedThread;
 import com.aeh.thread.impl.DedicatedWatchDogImpl;
+import com.aeh.thread.impl.ServerThreadImpl;
 
 public class AEHHolder {
-	private static volatile AEHHolder instance;
-
-
-
+	private static volatile AEHHolder instance = null;
+	
 	Queue<ServerThread> threadPoolQ;
 	Map<Integer,PObject> priorityObjects;
 	PriorityQueue<Integer> pQueue;
 	List<Queue<AEHandler>> handlerQueues;
-	AEHLockUtility lockUtil;
+	final AEHLockUtility lockUtil;
 	final int priorityCount;
+	private int serverThreadCount;
 
-	private AEHHolder(){
+	public AEHHolder(){
 		priorityCount = 8;
+
+		// initialize lock utility
+		lockUtil = new AEHLockUtility();
+		
 		initialize();
 	}
+	
+	public AEHHolder(int serverThreadCount, int priorityCount){
+		this.priorityCount = priorityCount;
+		this.serverThreadCount = serverThreadCount;
+		
+		// initialize lock utility
+		lockUtil = new AEHLockUtility();
+		
+		initialize();
+	}
+	
 	public void initialize(){
 		priorityObjects = new HashMap<Integer,PObject>();
 		//instantiate each priority object
 		for(int i=0;i<priorityCount;i++){
 			PObject pobject = new PObject(i);
 			pobject.setDedicatedFree(true);
-			DedicatedWatchDog dedicatedWatchDog = new DedicatedWatchDogImpl();
-			DedicatedThread dedicatedServerThread = new DedicatedThread();
-			pobject.setDedicatedThread(dedicatedServerThread);
-			pobject.setDedicatedWatchDog(dedicatedWatchDog);
-			priorityObjects.put(i, pobject);
+			//DedicatedWatchDog dedicatedWatchDog = new DedicatedWatchDogImpl();
+			//DedicatedThread dedicatedServerThread = new DedicatedThread();
+			//pobject.setDedicatedThread(dedicatedServerThread);
+			//pobject.setDedicatedWatchDog(dedicatedWatchDog);
+			//priorityObjects.put(i, pobject);
+			
+			// initilize handlerQueues list
+			
+			Queue<AEHandler> q = new LinkedList<AEHandler>();
+			handlerQueues.add(q);
 		}
-
+		
+		// initialize thread pool
+		
+		threadPoolQ = new LinkedList<ServerThread>();
+		
+		for(int i=0; i<serverThreadCount; i++){
+			threadPoolQ.add(new ServerThreadImpl());
+		}
+		
 	}
 
 
@@ -94,7 +123,7 @@ public class AEHHolder {
 		if(instance == null){
 			synchronized(AEHHolder.class){
 				if(instance == null)
-					instance = new AEHHolder(); 
+					instance = new AEHHolder(5, 10); 
 			}
 		}
 		return instance;
@@ -106,18 +135,16 @@ public class AEHHolder {
 	public ServerThread getThreadFromThreadPool(){
 		return threadPoolQ.poll();
 	}
+	
+	public AEHLockUtility getLockUtil(){
+		return lockUtil;
+	}
+	
 
-
-	public void enQueueHandler(List<AEHandler> eventHandlers){
-		//aehHolder
+	public  void enQueueHandler(List<AEHandler> eventHandlers){
+		
 		int priority = eventHandlers.get(0).getPriority();
-		try {
-			lockUtil.getQLock(priority);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		handlerQueues.get(priority);
+		lockUtil.getQLock(priority);
 		Queue <AEHandler> queue = handlerQueues.get(priority);
 		queue.addAll(eventHandlers);
 		lockUtil.releaseQLock(priority);
@@ -125,10 +152,8 @@ public class AEHHolder {
 		System.out.println("Entering synchronized block");
 		synchronized(pObject = priorityObjects.get(priority)){
 			pObject.count.incrementAndGet();
-			pObject.getDedicatedThread().notify();
+			pObject.getDedicatedWatchDog().notify();
 		}
-		//			lockUtil.notifyWatchDog(priority);
-
 	}
 
 }

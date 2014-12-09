@@ -23,17 +23,27 @@ public class AEHLockUtility {
 		}
 	}
 	
-	public synchronized void getQLock(int priority) throws InterruptedException {
+	public synchronized void getQLock(int priority){
 		System.out.println("test code from AEHlockutil need to implement ");
 		while(qLockList.get(priority)){
-			wait();
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		qLockList.set(priority,true);
 	}
 
-	public synchronized void getPQAndTPLock() throws InterruptedException {
+	public synchronized void getPQAndTPLock(){
 		while(pqtpLock){
-			wait();
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		pqtpLock = true;
 	}

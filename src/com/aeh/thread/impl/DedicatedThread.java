@@ -1,5 +1,6 @@
 package com.aeh.thread.impl;
 
+import com.aeh.thread.AEHandler;
 import com.aeh.thread.ServerThread;
 
 public class DedicatedThread implements ServerThread {
@@ -23,6 +24,16 @@ int priority;
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void executeHandler(){
+		
+	}
+	
+	@Override
+	public void bindHandler(AEHandler handler){
 		
 	}
 

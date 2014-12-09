@@ -19,11 +19,15 @@ public class ServerThreadImpl implements ServerThread{
 		});
 	}
 	
+	
+	@Override
 	public void bindHandler(AEHandler handler){
 		aeHandler = handler;
 		setThreadPriority(aeHandler.getPriority());
 	}
-
+	
+	
+	@Override
 	public void executeHandler() {
 		start();
 		// TODO execute handler and check what to do 
