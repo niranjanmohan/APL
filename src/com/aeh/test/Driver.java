@@ -11,12 +11,12 @@ import com.aeh.commonobjects.AsyncEventWrapper;
 public class Driver {
 	public static void main(String []args){
 		AEHHolder h = new AEHHolder(5,10);
-		AsyncEventWrapper event = new AsyncEventWrapper(3, h);
-		AEHandler handler1 = new AEHandlerImpl();
-		AEHandler handler2 = new AEHandlerImpl();
-		event.addHandler(handler1);
-		event.addHandler(handler2);
-		event.fire();
+//		AsyncEventWrapper event = new AsyncEventWrapper(3, h);
+//		AEHandler handler1 = new AEHandlerImpl();
+//		AEHandler handler2 = new AEHandlerImpl();
+//		event.addHandler(handler1);
+//		event.addHandler(handler2);
+//		event.fire();
 		
 		
 		

@@ -76,6 +76,7 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog {
 			PObject pObject = aehHolder.getPriorityObjects().get(priority);
 
 			if(pObject.count >0 ){
+				System.out.println("for priority "+priority+" count is greater than 0 "+pObject);
 				pObject.count--;
 				decrementFlag = true;
 				
@@ -84,6 +85,7 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog {
 				
 				// check for thread availability
 				if(!aehHolder.isThreadPoolEmpty()){
+					System.out.println("thread pool is not empty");
 					ServerThread t = aehHolder.getThreadFromThreadPool();
 					aehLockUtility.getQLock(priority);
 					Queue<AEHandler> q;
@@ -94,6 +96,7 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog {
 					aehLockUtility.releaseQLock(priority);
 				}
 				else{
+					System.out.println("thread pool is empty");
 					if(decrementFlag){
 						aehHolder.getpQueue().add(priority);
 					}
@@ -111,6 +114,7 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog {
 				aehLockUtility.releasePQAndTPLock();
 			}
 			else{
+				System.out.println("count is not greater than 0 "+pObject.count);
 				try {
 					this.wait();
 				} catch (InterruptedException e) {
