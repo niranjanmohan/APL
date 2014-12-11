@@ -17,8 +17,8 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog {
 	AEHLockUtility aehLockUtility;
 	NoHeapRealtimeThread noHeapRealTimeThread;
 	
-	public DedicatedWatchDogImpl() {
-		aehHolder = AEHHolder.getInstance();
+	public DedicatedWatchDogImpl(AEHHolder h) {
+		aehHolder = h;
 		aehLockUtility = aehHolder.getLockUtil();
 		noHeapRealTimeThread = new NoHeapRealtimeThread(new Runnable() {
 			
@@ -27,6 +27,7 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog {
 				start();
 			}
 		});
+		noHeapRealTimeThread.start();
 	}
 	
 	@Override
@@ -74,8 +75,8 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog {
 			System.out.println("the priority is   :"+ aehHolder.getPriorityObjects().get(priority));
 			PObject pObject = aehHolder.getPriorityObjects().get(priority);
 
-			if(pObject.count.get() >0 ){
-				pObject.count.decrementAndGet();
+			if(pObject.count >0 ){
+				pObject.count--;
 				decrementFlag = true;
 				
 				// get PQTP lock

@@ -10,7 +10,8 @@ import com.aeh.commonobjects.AsyncEventWrapper;
 
 public class Driver {
 	public static void main(String []args){
-		AsyncEventWrapper event = new AsyncEventWrapper(3);
+		AEHHolder h = new AEHHolder(5,10);
+		AsyncEventWrapper event = new AsyncEventWrapper(3, h);
 		AEHandler handler1 = new AEHandlerImpl();
 		AEHandler handler2 = new AEHandlerImpl();
 		event.addHandler(handler1);

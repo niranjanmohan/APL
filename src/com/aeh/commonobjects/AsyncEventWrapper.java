@@ -15,11 +15,11 @@ public class AsyncEventWrapper  extends AsyncEvent{
 	int priority;
 	
 
-	public AsyncEventWrapper(int priority) {
+	public AsyncEventWrapper(int priority, AEHHolder h) {
 		//aehHolder = 
 		handlers = new ArrayList<AEHandler>();
 		this.priority = priority;
-		aehHolder = AEHHolder.getInstance();
+		aehHolder = h;
 		lockUtil = aehHolder.getLockUtil();
 		// TODO Auto-generated constructor stub
 	}

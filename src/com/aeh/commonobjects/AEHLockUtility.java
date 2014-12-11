@@ -9,12 +9,16 @@ public class AEHLockUtility {
 	List<Boolean> qLockList = new ArrayList<Boolean>();
 	private boolean pqtpLock = false;
 	
-	private static class AEHHelper{
-		private static AEHLockUtility INSTANCE;
-	}
+//	private static class AEHHelper{
+//		private static AEHLockUtility INSTANCE;
+//	}
+//	
+//	public static AEHLockUtility getInstance(){
+//		return AEHHelper.INSTANCE;
+//	}
 	
-	public static AEHLockUtility getInstance(){
-		return AEHHelper.INSTANCE;
+	public AEHLockUtility(int priorityCount){
+		initializeQLock(priorityCount);
 	}
 	
 	public void initializeQLock(int no){
