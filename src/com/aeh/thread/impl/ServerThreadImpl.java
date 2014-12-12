@@ -16,17 +16,18 @@ public class ServerThreadImpl extends RealtimeThread{
 		this.aehHolder = holder;
 	}
 	
-	public void bindHandler(AEHandler handler){
+	public void bindHandler(AEHandler handler, boolean setPriority){
 		aeHandler = handler;
-		setThreadPriority(aeHandler.getPriority());
+		if(setPriority)
+			setThreadPriority(aeHandler.getPriority());
 	}
 	
 	@Override
 	public void run(){
-		executeHandler(false);
+		executeHandler();
 	}
 	
-	public void executeHandler(boolean what) {
+	public void executeHandler() {
 		System.out.println("Executing ["+aeHandler.getPriority()+"]");
 		aeHandler.handlerLogic();
 		next();
@@ -41,36 +42,50 @@ public class ServerThreadImpl extends RealtimeThread{
 	}
 	
 	public void next(){
-		PObject pObject = aehHolder.getPriorityObjects().get(aeHandler.getPriority());
-			synchronized (pObject.getDedicatedWatchDog()) {
-			aehHolder.getLockUtil().getPQAndTPLock();
-			int hp;
-			try{
-				 hp = aehHolder.getpQueue().peek();
-			}
-			catch(Exception e){
-				System.out.println("null exception in PQ");
-				aehHolder.getLockUtil().releasePQAndTPLock();
-				return;
-			}
+		aehHolder.getLockUtil().getPQAndTPLock();
+		int hp;
+		try{
+			 hp = aehHolder.getpQueue().peek();
+		}
+		catch(Exception e){
+			System.out.println("null exception in PQ");
+			//aehHolder.getLockUtil().releasePQAndTPLock();
+			return;
+		}
+		PObject pObject = aehHolder.getPriorityObjects().get(hp);
+			
+			
 			
 			if(hp>aeHandler.getPriority()){
-				System.out.println("There is a higher priority available");
+				System.out.println("There is a higher priority available ["+aeHandler.getPriority()+"]");
+				addNewThreadToPool();
 				aehHolder.getLockUtil().releasePQAndTPLock();
-				aehHolder.getThreadPoolQ().add(this);
-				aehHolder.getPriorityObjects().get(hp).getDedicatedWatchDog().notify();
+				//aehHolder.getPriorityObjects().get(hp).getDedicatedWatchDog().notify();
+				pObject.getDedicatedWatchDog().notify();
+				return;
 			}
 			else{
-				System.out.println("There is no higher priority available "+ hp);
-				aehHolder.getpQueue().poll();
-				Queue<AEHandler> q;
-				if(!( q = aehHolder.getQueue(hp)).isEmpty()){
-					this.bindHandler(q.poll());
-					aehHolder.getLockUtil().releasePQAndTPLock();
-					this.executeHandler(false);	
-				}
+				addNewThreadToPool();
+				aehHolder.getLockUtil().releasePQAndTPLock();
+				//aehHolder.getPriorityObjects().get(hp).getDedicatedWatchDog().notify();
+				pObject.getDedicatedWatchDog().notify();
+				return;
 			}
-		}	
+//			else{
+//				System.out.println(hp+" -- There is no higher priority available ["+aeHandler.getPriority()+"]");	
+//				aehHolder.getpQueue().poll();
+//				Queue<AEHandler> q;
+//				if(!( q = aehHolder.getQueue(hp)).isEmpty()){
+//					this.bindHandler(q.poll(),false);
+//					aehHolder.getLockUtil().releasePQAndTPLock();
+//				}
+//			}
+	
+			//this.executeHandler();	
+	}
+	
+	public void addNewThreadToPool(){
+		aehHolder.getThreadPoolQ().add(new ServerThreadImpl(aehHolder));
 	}
 
 }

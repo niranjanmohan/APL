@@ -6,8 +6,8 @@ import java.util.List;
 
 public class AEHLockUtility {
 	
-	List<Boolean> qLockList = new ArrayList<Boolean>();
-	private boolean pqtpLock = false;
+	volatile List<Boolean> qLockList = new ArrayList<Boolean>();
+	private volatile boolean  pqtpLock = false;
 	
 //	private static class AEHHelper{
 //		private static AEHLockUtility INSTANCE;
@@ -41,6 +41,7 @@ public class AEHLockUtility {
 	}
 
 	public synchronized void getPQAndTPLock(){
+		System.out.println("in lock pqtp");
 		while(pqtpLock){
 			try {
 				wait();
@@ -53,6 +54,7 @@ public class AEHLockUtility {
 	}
 
 	public synchronized void releasePQAndTPLock() {
+		System.out.println("release pqtp lock");
 		pqtpLock = false;
 		notify();
 	}

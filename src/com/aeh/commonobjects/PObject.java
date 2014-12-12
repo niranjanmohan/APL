@@ -13,7 +13,7 @@ public class PObject {
 	boolean isDedicatedFree;
 	DedicatedThread dedicatedThread;
 	DedicatedWatchDogImpl watchDog;
-	public int count ;
+	volatile public int count ;
 	public Object lock = new Object();
 
 	public PObject(int priority, AEHHolder h){
