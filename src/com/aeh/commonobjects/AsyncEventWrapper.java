@@ -3,6 +3,7 @@ package com.aeh.commonobjects;
 import com.aeh.thread.AEHandler;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import javax.realtime.AsyncEvent;
 import com.aeh.AEHHolder;
@@ -45,11 +46,25 @@ public class AsyncEventWrapper  extends AsyncEvent{
 	
 	
 	public void fire(){
-		System.out.println("called file enque handlers");
-		aehHolder.enQueueHandler(handlers);
+		//System.out.println("called file enque handlers");
+		enqueueHandler();
 		//here we have to enqueue update count 
-		System.out.println("finifhed enqueue handler");
+		//System.out.println("finifhed enqueue handler");
 		
+	}
+	
+	public void enqueueHandler(){
+		int handlerCount = handlers.size();
+		lockUtil.getQLock(priority);
+		Queue <AEHandler> queue = aehHolder.getHandlerQueues().get(priority);
+		queue.addAll(handlers);
+		lockUtil.releaseQLock(priority);
+		PObject pObject = aehHolder.getPriorityObjects().get(priority);
+		//System.out.println("Entering synchronized block");
+		synchronized(pObject.getDedicatedWatchDog()){
+			pObject.count= pObject.count + handlerCount;//.incrementAndGet();
+			pObject.getDedicatedWatchDog().notify();
+		}
 	}
 
 }

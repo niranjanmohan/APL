@@ -28,7 +28,7 @@ public class AEHLockUtility {
 	}
 	
 	public synchronized void getQLock(int priority){
-		System.out.println("test code from AEHlockutil need to implement ");
+		//System.out.println("test code from AEHlockutil need to implement ");
 		while(qLockList.get(priority)){
 			try {
 				wait();

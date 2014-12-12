@@ -2,82 +2,62 @@ package com.aeh.thread.impl;
 
 import java.util.Queue;
 
-import javax.realtime.NoHeapRealtimeThread;
+import javax.realtime.RealtimeThread;
 
 import com.aeh.AEHHolder;
 import com.aeh.commonobjects.AEHLockUtility;
 import com.aeh.commonobjects.PObject;
 import com.aeh.thread.AEHandler;
-import com.aeh.thread.DedicatedWatchDog;
-import com.aeh.thread.ServerThread;
 
-public class DedicatedWatchDogImpl implements DedicatedWatchDog {
+public class DedicatedWatchDogImpl extends RealtimeThread {
 	int priority;
 	AEHHolder aehHolder;
 	AEHLockUtility aehLockUtility;
-	NoHeapRealtimeThread noHeapRealTimeThread;
+	RealtimeThread rtThread;
 	
-	public DedicatedWatchDogImpl(AEHHolder h) {
+	public DedicatedWatchDogImpl(int p, AEHHolder h) {
 		aehHolder = h;
+		priority = p;
+		this.setPriority(priority+1);
 		aehLockUtility = aehHolder.getLockUtil();
-		noHeapRealTimeThread = new NoHeapRealtimeThread(new Runnable() {
-			
-			@Override
-			public void run() {
-				start();
-			}
-		});
-		noHeapRealTimeThread.start();
 	}
 	
 	@Override
-	public int getPriority() {
-		return priority;
+	public void run(){
+		go();
 	}
 	
-	@Override
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
+//	public int getPriority() {
+//		return priority;
+//	}
+//	
+//	
+//	public void setPriority(int priority) {
+//		this.priority = priority;
+//	}
+//	
 	
 	
-	@Override
 	public void initiateProcess() {
 		// TODO Auto-generated method stub
 		
 	}
 	
 	
-	@Override
-	public void wake(){
-		noHeapRealTimeThread.notify();
-	}
-	
-	
-	@Override
-	public void waitOn(){
-		try {
-			noHeapRealTimeThread.wait();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	
-	@Override
-	public void start() {
-		System.out.println("Enter the Dedicated thread for priority ----->"+priority);
+	public void go() {
+		//System.out.println("Enter the Dedicated thread for priority ----->"+priority);
 		boolean decrementFlag;
 		//get the count 
 		while(true){
 			decrementFlag = false;
-			System.out.println("the priority is   :"+ aehHolder.getPriorityObjects().get(priority));
+			//System.out.println("the priority is   :"+ aehHolder.getPriorityObjects().get(priority));
 			PObject pObject = aehHolder.getPriorityObjects().get(priority);
-
+			//System.out.println(pObject.count);
 			if(pObject.count >0 ){
-				System.out.println("for priority "+priority+" count is greater than 0 "+pObject);
-				pObject.count--;
+				System.out.println("count is greater than 0  ["+priority+"]");
+				synchronized (this) {
+					pObject.count--;
+				}
 				decrementFlag = true;
 				
 				// get PQTP lock
@@ -85,8 +65,8 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog {
 				
 				// check for thread availability
 				if(!aehHolder.isThreadPoolEmpty()){
-					System.out.println("thread pool is not empty");
-					ServerThread t = aehHolder.getThreadFromThreadPool();
+					System.out.println("thread pool is not empty ["+priority+"]");
+					ServerThreadImpl t = aehHolder.getThreadFromThreadPool();
 					aehLockUtility.getQLock(priority);
 					Queue<AEHandler> q;
 					if(!( q = aehHolder.getQueue(priority)).isEmpty()){
@@ -96,16 +76,18 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog {
 					aehLockUtility.releaseQLock(priority);
 				}
 				else{
-					System.out.println("thread pool is empty");
+					System.out.println("thread pool is empty ["+priority+"]");
 					if(decrementFlag){
 						aehHolder.getpQueue().add(priority);
 					}
 					else{
-						try {
-							this.wait();
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						synchronized (this) {
+							try {
+								wait();
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 					}
 				}
@@ -114,12 +96,14 @@ public class DedicatedWatchDogImpl implements DedicatedWatchDog {
 				aehLockUtility.releasePQAndTPLock();
 			}
 			else{
-				System.out.println("count is not greater than 0 "+pObject.count);
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				System.out.println("count is not greater than 0  ["+priority+"]");
+				synchronized (this) {
+					try {
+						wait();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 			

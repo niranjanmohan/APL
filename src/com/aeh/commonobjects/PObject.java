@@ -12,15 +12,12 @@ import com.aeh.thread.impl.DedicatedWatchDogImpl;
 public class PObject {
 	boolean isDedicatedFree;
 	DedicatedThread dedicatedThread;
-	DedicatedWatchDog dedicatedWatchDog;
+	DedicatedWatchDogImpl watchDog;
 	public int count ;
 
 	public PObject(int priority, AEHHolder h){
+		count = 0;
 		isDedicatedFree = true;
-		//dedicatedThread = new DedicatedThread();
-		//dedicatedThread.setPriority(priority);
-		dedicatedWatchDog = new DedicatedWatchDogImpl(h);
-		dedicatedWatchDog.setPriority(priority);
 //		count = new AtomicInteger(0);
 	}
 	
@@ -37,10 +34,10 @@ public class PObject {
 	public void setDedicatedThread(DedicatedThread dedicatedThread) {
 		this.dedicatedThread = dedicatedThread;
 	}
-	public DedicatedWatchDog getDedicatedWatchDog() {
-		return dedicatedWatchDog;
+	public DedicatedWatchDogImpl getDedicatedWatchDog() {
+		return watchDog;
 	}
-	public void setDedicatedWatchDog(DedicatedWatchDog dedicatedWatchDog) {
-		this.dedicatedWatchDog = dedicatedWatchDog;
+	public void setDedicatedWatchDog(DedicatedWatchDogImpl dedicatedWatchDog) {
+		this.watchDog = dedicatedWatchDog;
 	}
 }
