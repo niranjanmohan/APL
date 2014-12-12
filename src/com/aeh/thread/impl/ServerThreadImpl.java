@@ -23,13 +23,13 @@ public class ServerThreadImpl extends RealtimeThread{
 	
 	@Override
 	public void run(){
-		aeHandler.handlerLogic();
-		next();
+		executeHandler(false);
 	}
 	
-	public void executeHandler() {
-		if(this.getState()==State.NEW)
-			this.start();
+	public void executeHandler(boolean what) {
+		System.out.println("Executing ["+aeHandler.getPriority()+"]");
+		aeHandler.handlerLogic();
+		next();
 	}
 
 	public void setThreadPriority(int priority) {
@@ -42,7 +42,7 @@ public class ServerThreadImpl extends RealtimeThread{
 	
 	public void next(){
 		PObject pObject = aehHolder.getPriorityObjects().get(aeHandler.getPriority());
-			synchronized (pObject.lock) {
+			synchronized (pObject.getDedicatedWatchDog()) {
 			aehHolder.getLockUtil().getPQAndTPLock();
 			int hp;
 			try{
@@ -58,7 +58,7 @@ public class ServerThreadImpl extends RealtimeThread{
 				System.out.println("There is a higher priority available");
 				aehHolder.getLockUtil().releasePQAndTPLock();
 				aehHolder.getThreadPoolQ().add(this);
-				pObject.getDedicatedWatchDog().notify();
+				aehHolder.getPriorityObjects().get(hp).getDedicatedWatchDog().notify();
 			}
 			else{
 				System.out.println("There is no higher priority available "+ hp);
@@ -67,7 +67,7 @@ public class ServerThreadImpl extends RealtimeThread{
 				if(!( q = aehHolder.getQueue(hp)).isEmpty()){
 					this.bindHandler(q.poll());
 					aehHolder.getLockUtil().releasePQAndTPLock();
-					this.executeHandler();	
+					this.executeHandler(false);	
 				}
 			}
 		}	

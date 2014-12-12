@@ -52,7 +52,7 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 			decrementFlag = false;
 			//System.out.println("the priority is   :"+ aehHolder.getPriorityObjects().get(priority));
 			PObject pObject = aehHolder.getPriorityObjects().get(priority);
-			synchronized (pObject.lock) {
+			synchronized (this) {
 			//System.out.println(pObject.count);
 			if(pObject.count >0 ){
 				System.out.println("count is greater than 0  ["+priority+"]");
@@ -70,7 +70,7 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 					Queue<AEHandler> q;
 					if(!( q = aehHolder.getQueue(priority)).isEmpty()){
 						t.bindHandler(q.poll());
-						t.executeHandler();	
+						t.start();	
 					}
 					//aehLockUtility.releaseQLock(priority);
 				}
