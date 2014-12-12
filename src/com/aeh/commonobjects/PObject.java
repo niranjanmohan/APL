@@ -14,6 +14,7 @@ public class PObject {
 	DedicatedThread dedicatedThread;
 	DedicatedWatchDogImpl watchDog;
 	public int count ;
+	public Object lock = new Object();
 
 	public PObject(int priority, AEHHolder h){
 		count = 0;

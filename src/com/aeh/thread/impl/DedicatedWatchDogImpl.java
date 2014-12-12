@@ -52,12 +52,11 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 			decrementFlag = false;
 			//System.out.println("the priority is   :"+ aehHolder.getPriorityObjects().get(priority));
 			PObject pObject = aehHolder.getPriorityObjects().get(priority);
+			synchronized (pObject.lock) {
 			//System.out.println(pObject.count);
 			if(pObject.count >0 ){
 				System.out.println("count is greater than 0  ["+priority+"]");
-				synchronized (this) {
-					pObject.count--;
-				}
+				pObject.count--;
 				decrementFlag = true;
 				
 				// get PQTP lock
@@ -67,13 +66,13 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 				if(!aehHolder.isThreadPoolEmpty()){
 					System.out.println("thread pool is not empty ["+priority+"]");
 					ServerThreadImpl t = aehHolder.getThreadFromThreadPool();
-					aehLockUtility.getQLock(priority);
+					//aehLockUtility.getQLock(priority);
 					Queue<AEHandler> q;
 					if(!( q = aehHolder.getQueue(priority)).isEmpty()){
 						t.bindHandler(q.poll());
 						t.executeHandler();	
 					}
-					aehLockUtility.releaseQLock(priority);
+					//aehLockUtility.releaseQLock(priority);
 				}
 				else{
 					System.out.println("thread pool is empty ["+priority+"]");
@@ -81,14 +80,12 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 						aehHolder.getpQueue().add(priority);
 					}
 					else{
-						synchronized (this) {
 							try {
 								wait();
 							} catch (InterruptedException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						}
 					}
 				}
 				
@@ -97,16 +94,16 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 			}
 			else{
 				System.out.println("count is not greater than 0  ["+priority+"]");
-				synchronized (this) {
+				
 					try {
 						wait();
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}
+				
 			}
-			
+			}
 		}
 	}
 }

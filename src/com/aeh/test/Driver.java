@@ -12,15 +12,15 @@ import com.aeh.commonobjects.AsyncEventWrapper;
 public class Driver {
 	public static void main(String []args){
 		AEHHolder h = new AEHHolder(2,4);
-		AsyncEventWrapper event4 = new AsyncEventWrapper(3, h);
+		//AsyncEventWrapper event4 = new AsyncEventWrapper(3, h);
 		AsyncEventWrapper event3 = new AsyncEventWrapper(2, h);
 		AEHandler handler1 = new AEHandlerImpl("i will do this");
 		AEHandler handler2 = new AEHandlerImpl("i will do that");
-		event4.addHandler(handler1);
+		//event4.addHandler(handler1);
 		event3.addHandler(handler1);
 		event3.addHandler(handler2);
 		event3.fire();
-		event4.fire();
+		//event4.fire();
 		
 //		
 //		RThread rr = new RThread();
