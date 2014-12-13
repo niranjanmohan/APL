@@ -11,7 +11,7 @@ import com.aeh.commonobjects.AsyncEventWrapper;
 
 public class Driver {
 	public static void main(String []args){
-		AEHHolder h = new AEHHolder(1,4);
+		AEHHolder h = new AEHHolder(3,4,false);
 		AsyncEventWrapper event4 = new AsyncEventWrapper(3, h);
 		AsyncEventWrapper event3 = new AsyncEventWrapper(2, h);
 		AsyncEventWrapper event2 = new AsyncEventWrapper(1, h);
@@ -24,6 +24,12 @@ public class Driver {
 		AEHandler handler7 = new AEHandlerImpl("i will do this");
 		AEHandler handler8= new AEHandlerImpl("i will do this");
 		AEHandler handler9 = new AEHandlerImpl("i will do this");
+		AEHandler handler10 = new AEHandlerImpl("i will do this");
+		AEHandler handler11 = new AEHandlerImpl("i will do this");
+		AEHandler handler12 = new AEHandlerImpl("i will do this");
+		AEHandler handler13 = new AEHandlerImpl("i will do this");
+		AEHandler handler14 = new AEHandlerImpl("i will do this");
+		AEHandler handler15 = new AEHandlerImpl("i will do this");
 		event4.addHandler(handler3);
 		event4.addHandler(handler6);
 		event4.addHandler(handler7);
@@ -33,9 +39,16 @@ public class Driver {
 		event3.addHandler(handler2);
 		event2.addHandler(handler4);
 		event2.addHandler(handler5);
-		event4.fire();
-		event3.fire();
+		event2.addHandler(handler10);
+		event2.addHandler(handler11);
+		event2.addHandler(handler12);
+		event3.addHandler(handler13);
+		event3.addHandler(handler14);
+		event3.addHandler(handler15);
 		event2.fire();
+		event3.fire();
+		event4.fire();
+		
 		
 		
 		

@@ -12,6 +12,7 @@ import java.util.Comparator;
 import com.aeh.commonobjects.AEHLockUtility;
 import com.aeh.commonobjects.PObject;
 import com.aeh.thread.AEHandler;
+import com.aeh.thread.impl.DedicatedThread;
 import com.aeh.thread.impl.DedicatedWatchDogImpl;
 import com.aeh.thread.impl.ServerThreadImpl;
 
@@ -24,7 +25,7 @@ public class AEHHolder {
 	AEHLockUtility lockUtil;
 	int priorityCount;
 	int serverThreadCount;
-	
+	public boolean useDedicatedThread = true;
 	
 
 //	public AEHHolder(){
@@ -34,10 +35,11 @@ public class AEHHolder {
 //		initialize();
 //	}
 	
-	public AEHHolder(int serverThreadCount, int priorityCount){
+	public AEHHolder(int serverThreadCount, int priorityCount, boolean useDedicatedThread){
 //		System.out.println("creating object inside constructor");
 		this.priorityCount = priorityCount;
 		this.serverThreadCount = serverThreadCount;
+		this.useDedicatedThread = useDedicatedThread;
 		handlerQueues = new ArrayList<Queue<AEHandler>>();
 		threadPoolQ = new LinkedList<ServerThreadImpl>();
 		pQueue = new PriorityQueue<Integer>(10,new Comparator<Integer>() {
@@ -63,9 +65,10 @@ public class AEHHolder {
 			PObject pobject = new PObject(i,this);
 			DedicatedWatchDogImpl watchDog = new DedicatedWatchDogImpl(i,this);
 			pobject.setDedicatedWatchDog(watchDog);
+			DedicatedThread dedicatedThread = new DedicatedThread(i, this);
+			pobject.setDedicatedThread(dedicatedThread);
 			priorityObjects.put(i, pobject);
 			watchDog.start();
-//			pobject.setDedicatedThread(dedicatedServerThread);
 //			pobject.setDedicatedWatchDog(dedicatedWatchDog);
 			
 			
