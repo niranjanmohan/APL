@@ -56,13 +56,12 @@ public class AsyncEventWrapper  extends AsyncEvent{
 	public void enqueueHandler(){
 		int handlerCount = handlers.size();
 		PObject pObject = aehHolder.getPriorityObjects().get(priority);
+		aehHolder.getLockUtil().getQLock(priority);
+		pObject.count= pObject.count + handlerCount;
+		aehHolder.getLockUtil().releaseQLock(priority);
 		synchronized(pObject.getDedicatedWatchDog()){
-			//lockUtil.getQLock(priority);
 			Queue <AEHandler> queue = aehHolder.getHandlerQueues().get(priority);
 			queue.addAll(handlers);
-			//lockUtil.releaseQLock(priority);
-			//System.out.println("Entering synchronized block");
-			pObject.count= pObject.count + handlerCount;//.incrementAndGet();
 			pObject.getDedicatedWatchDog().notify();
 		}
 	}
