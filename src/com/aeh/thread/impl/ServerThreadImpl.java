@@ -44,7 +44,7 @@ public class ServerThreadImpl extends RealtimeThread{
 	public void next(){
 		
 		aehHolder.getLockUtil().getPQAndTPLock();
-		System.out.println("PQ = "+aehHolder.getpQueue().toString());
+//		System.out.println("PQ = "+aehHolder.getpQueue().toString());
 		int hp;
 		if(aehHolder.getpQueue().isEmpty()){
 			addNewThreadToPool();

@@ -52,7 +52,7 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 					}
 					else{
 						aehHolder.getpQueue().add(priority);
-						System.out.println("added to PQ "+aehHolder.getpQueue().toString());
+//						System.out.println("added to PQ "+aehHolder.getpQueue().toString());
 						aehLockUtility.releasePQAndTPLock();
 						//makeItWait();	
 					}
@@ -62,7 +62,7 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 						aehLockUtility.getPQAndTPLock();
 						if(!aehHolder.isThreadPoolEmpty() && (aehHolder.getpQueue().peek() == priority) ){
 							aehHolder.getpQueue().poll();
-							System.out.println("polled from PQ "+aehHolder.getpQueue().toString());
+//							System.out.println("polled from PQ "+aehHolder.getpQueue().toString());
 							bindAndStart();
 						}
 						else{
@@ -88,9 +88,9 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 			t.start();	
 		}
 		else{
-			System.out.println("no handler for priority ________________"+priority);
+//			System.out.println("no handler for priority ________________"+priority);
 			for(int i =0;i<aehHolder.getHandlerQueues().size();i++){
-				System.out.println(i+" - "+aehHolder.getQueue(i).size());
+//				System.out.println(i+" - "+aehHolder.getQueue(i).size());
 			}
 			aehLockUtility.releasePQAndTPLock();
 		}
