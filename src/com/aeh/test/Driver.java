@@ -11,7 +11,7 @@ import com.aeh.commonobjects.AsyncEventWrapper;
 
 public class Driver {
 	public static void main(String []args){
-		AEHHolder h = new AEHHolder(2,4);
+		AEHHolder h = new AEHHolder(1,4);
 		AsyncEventWrapper event4 = new AsyncEventWrapper(3, h);
 		AsyncEventWrapper event3 = new AsyncEventWrapper(2, h);
 		AsyncEventWrapper event2 = new AsyncEventWrapper(1, h);
@@ -20,7 +20,15 @@ public class Driver {
 		AEHandler handler3 = new AEHandlerImpl("i will do this");
 		AEHandler handler4 = new AEHandlerImpl("i will do this");
 		AEHandler handler5 = new AEHandlerImpl("i will do this");
+		AEHandler handler6 = new AEHandlerImpl("i will do this");
+		AEHandler handler7 = new AEHandlerImpl("i will do this");
+		AEHandler handler8= new AEHandlerImpl("i will do this");
+		AEHandler handler9 = new AEHandlerImpl("i will do this");
 		event4.addHandler(handler3);
+		event4.addHandler(handler6);
+		event4.addHandler(handler7);
+		event4.addHandler(handler8);
+		event4.addHandler(handler9);
 		event3.addHandler(handler1);
 		event3.addHandler(handler2);
 		event2.addHandler(handler4);

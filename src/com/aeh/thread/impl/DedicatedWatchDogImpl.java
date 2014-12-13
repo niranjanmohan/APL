@@ -39,7 +39,6 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 	
 	public void go() {
 		boolean decrementFlag;
-		System.out.println("in thread with priority "+priority);
 		while(true){
 			decrementFlag = false;
 			PObject pObject = aehHolder.getPriorityObjects().get(priority);

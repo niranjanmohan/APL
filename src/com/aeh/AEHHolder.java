@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Comparator;
 
 import com.aeh.commonobjects.AEHLockUtility;
 import com.aeh.commonobjects.PObject;
@@ -39,7 +40,13 @@ public class AEHHolder {
 		this.serverThreadCount = serverThreadCount;
 		handlerQueues = new ArrayList<Queue<AEHandler>>();
 		threadPoolQ = new LinkedList<ServerThreadImpl>();
-		pQueue = new PriorityQueue<Integer>();
+		pQueue = new PriorityQueue<Integer>(10,new Comparator<Integer>() {
+				@Override
+				public int compare(Integer o1, Integer o2) {
+					// TODO Auto-generated method stub
+					return o2.compareTo(o1);
+				};
+			});
 	
 		// initialize lock utility
 		lockUtil = new AEHLockUtility(priorityCount);
