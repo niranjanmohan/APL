@@ -28,8 +28,8 @@ public class ServerThreadImpl extends RealtimeThread{
 	}
 	
 	public void executeHandler() {
-		System.out.println("Executing ["+aeHandler.getPriority()+"]");
-		aeHandler.handlerLogic();
+		System.out.println("Executing {{"+aeHandler.getPriority()+"}}");
+		//aeHandler.handlerLogic();
 		next();
 	}
 
@@ -44,6 +44,7 @@ public class ServerThreadImpl extends RealtimeThread{
 	public void next(){
 		
 		aehHolder.getLockUtil().getPQAndTPLock();
+		System.out.println("PQ = "+aehHolder.getpQueue().toString());
 		int hp;
 		if(aehHolder.getpQueue().isEmpty()){
 			addNewThreadToPool();
@@ -51,8 +52,6 @@ public class ServerThreadImpl extends RealtimeThread{
 			return;
 		}
 		hp = aehHolder.getpQueue().peek();
-		
-		//System.out.println("There is a higher priority available ["+aeHandler.getPriority()+"]");
 		addNewThreadToPool();
 		aehHolder.getLockUtil().releasePQAndTPLock();
 		PObject pObject = aehHolder.getPriorityObjects().get(hp);

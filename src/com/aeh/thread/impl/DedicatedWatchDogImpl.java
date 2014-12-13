@@ -1,5 +1,6 @@
 package com.aeh.thread.impl;
 
+import java.util.PriorityQueue;
 import java.util.Queue;
 
 import javax.realtime.RealtimeThread;
@@ -26,6 +27,7 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 	public void run(){
 //		synchronized (this) {
 //			try {
+//				System.out.println("it did come here "+ priority);
 //				wait();
 //			} catch (InterruptedException e) {
 //				// TODO Auto-generated catch block
@@ -36,46 +38,42 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 	}
 	
 	public void go() {
-		//System.out.println("Enter the Dedicated thread for priority ----->"+priority);
 		boolean decrementFlag;
+		System.out.println("in thread with priority "+priority);
 		while(true){
 			decrementFlag = false;
 			PObject pObject = aehHolder.getPriorityObjects().get(priority);
 			synchronized (this) {
 				if(pObject.count >0 ){
-//					System.out.println("count is greater than 0  ["+priority+"]");
 					pObject.count--;
 					decrementFlag = true;
 					aehLockUtility.getPQAndTPLock();
 					if(!aehHolder.isThreadPoolEmpty()){
-//						System.out.println("thread pool is not empty ["+priority+"]");
 						bindAndStart();
 					}
 					else{
-//						System.out.println("thread pool is empty ["+priority+"]");
-//						System.out.println("adding to PQ ["+priority+"]");
 						aehHolder.getpQueue().add(priority);
+						System.out.println("added to PQ "+aehHolder.getpQueue().toString());
 						aehLockUtility.releasePQAndTPLock();
-						makeItWait();	
+						//makeItWait();	
 					}
 				}
 				else{
-//					System.out.println("count is not greater than 0  ["+priority+"]");			
 					if(!aehHolder.getpQueue().isEmpty()){
 						aehLockUtility.getPQAndTPLock();
-						if(!aehHolder.isThreadPoolEmpty()){
+						if(!aehHolder.isThreadPoolEmpty() && (aehHolder.getpQueue().peek() == priority) ){
 							aehHolder.getpQueue().poll();
-//							System.out.println("count!> 0 & thread pool is not empty ["+priority+"]");
+							System.out.println("polled from PQ "+aehHolder.getpQueue().toString());
 							bindAndStart();
 						}
 						else{
-//							System.out.println("count!> 0 & thread pool is empty ["+priority+"]");
 							aehLockUtility.releasePQAndTPLock();
 							makeItWait();					
 						}
 					}
 					else{
-						makeItWait();
+						aehLockUtility.releasePQAndTPLock();
+						makeItWait();					
 					}
 				}
 			}
@@ -83,12 +81,19 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 	}
 	
 	public void bindAndStart(){
-		ServerThreadImpl t = aehHolder.getThreadFromThreadPool();
 		Queue<AEHandler> q;
 		if(!( q = aehHolder.getQueue(priority)).isEmpty()){
+			ServerThreadImpl t = aehHolder.getThreadFromThreadPool();
 			t.bindHandler(q.poll(),true);
 			aehLockUtility.releasePQAndTPLock();
 			t.start();	
+		}
+		else{
+			System.out.println("no handler for priority ________________"+priority);
+			for(int i =0;i<aehHolder.getHandlerQueues().size();i++){
+				System.out.println(i+" - "+aehHolder.getQueue(i).size());
+			}
+			aehLockUtility.releasePQAndTPLock();
 		}
 	}
 	public void makeItWait(){
