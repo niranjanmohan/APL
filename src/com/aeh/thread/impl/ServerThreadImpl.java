@@ -45,16 +45,14 @@ public class ServerThreadImpl extends RealtimeThread{
 		
 		aehHolder.getLockUtil().getPQAndTPLock();
 		int hp;
-		try{
-			 hp = aehHolder.getpQueue().peek();
-		}
-		catch(Exception e){
-			System.out.println("null exception in PQ");
+		if(aehHolder.getpQueue().isEmpty()){
+			addNewThreadToPool();
 			aehHolder.getLockUtil().releasePQAndTPLock();
 			return;
 		}
+		hp = aehHolder.getpQueue().peek();
 		
-		System.out.println("There is a higher priority available ["+aeHandler.getPriority()+"]");
+		//System.out.println("There is a higher priority available ["+aeHandler.getPriority()+"]");
 		addNewThreadToPool();
 		aehHolder.getLockUtil().releasePQAndTPLock();
 		PObject pObject = aehHolder.getPriorityObjects().get(hp);

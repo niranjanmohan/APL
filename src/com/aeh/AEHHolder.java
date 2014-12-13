@@ -34,7 +34,7 @@ public class AEHHolder {
 //	}
 	
 	public AEHHolder(int serverThreadCount, int priorityCount){
-		System.out.println("creating object inside constructor");
+//		System.out.println("creating object inside constructor");
 		this.priorityCount = priorityCount;
 		this.serverThreadCount = serverThreadCount;
 		handlerQueues = new ArrayList<Queue<AEHandler>>();
@@ -45,7 +45,7 @@ public class AEHHolder {
 		lockUtil = new AEHLockUtility(priorityCount);
 		
 		initialize();
-		System.out.println("finished creating object");
+//		System.out.println("finished creating object");
 	}
 	
 	public void initialize(){

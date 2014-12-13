@@ -43,33 +43,33 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 			PObject pObject = aehHolder.getPriorityObjects().get(priority);
 			synchronized (this) {
 				if(pObject.count >0 ){
-					System.out.println("count is greater than 0  ["+priority+"]");
+//					System.out.println("count is greater than 0  ["+priority+"]");
 					pObject.count--;
 					decrementFlag = true;
 					aehLockUtility.getPQAndTPLock();
 					if(!aehHolder.isThreadPoolEmpty()){
-						System.out.println("thread pool is not empty ["+priority+"]");
+//						System.out.println("thread pool is not empty ["+priority+"]");
 						bindAndStart();
 					}
 					else{
-						System.out.println("thread pool is empty ["+priority+"]");
-						System.out.println("adding to PQ ["+priority+"]");
+//						System.out.println("thread pool is empty ["+priority+"]");
+//						System.out.println("adding to PQ ["+priority+"]");
 						aehHolder.getpQueue().add(priority);
 						aehLockUtility.releasePQAndTPLock();
 						makeItWait();	
 					}
 				}
 				else{
-					System.out.println("count is not greater than 0  ["+priority+"]");			
+//					System.out.println("count is not greater than 0  ["+priority+"]");			
 					if(!aehHolder.getpQueue().isEmpty()){
 						aehLockUtility.getPQAndTPLock();
 						if(!aehHolder.isThreadPoolEmpty()){
 							aehHolder.getpQueue().poll();
-							System.out.println("count!> 0 & thread pool is not empty ["+priority+"]");
+//							System.out.println("count!> 0 & thread pool is not empty ["+priority+"]");
 							bindAndStart();
 						}
 						else{
-							System.out.println("count!> 0 & thread pool is empty ["+priority+"]");
+//							System.out.println("count!> 0 & thread pool is empty ["+priority+"]");
 							aehLockUtility.releasePQAndTPLock();
 							makeItWait();					
 						}

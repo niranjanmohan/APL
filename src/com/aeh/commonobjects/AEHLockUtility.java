@@ -41,7 +41,7 @@ public class AEHLockUtility {
 	}
 
 	public synchronized void getPQAndTPLock(){
-		System.out.println("in lock pqtp");
+//		System.out.println("in lock pqtp");
 		while(pqtpLock){
 			try {
 				wait();
@@ -54,7 +54,7 @@ public class AEHLockUtility {
 	}
 
 	public synchronized void releasePQAndTPLock() {
-		System.out.println("release pqtp lock");
+//		System.out.println("release pqtp lock");
 		pqtpLock = false;
 		notify();
 	}
