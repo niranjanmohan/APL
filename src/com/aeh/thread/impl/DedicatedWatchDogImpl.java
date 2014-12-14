@@ -1,6 +1,4 @@
 package com.aeh.thread.impl;
-
-import java.util.PriorityQueue;
 import java.util.Queue;
 
 import javax.realtime.RealtimeThread;
@@ -25,15 +23,6 @@ public class DedicatedWatchDogImpl extends RealtimeThread {
 	
 	@Override
 	public void run(){
-//		synchronized (this) {
-//			try {
-//				System.out.println("it did come here "+ priority);
-//				wait();
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
 		go();
 	}
 	

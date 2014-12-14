@@ -1,7 +1,5 @@
 package com.aeh.thread.impl;
-
 import java.util.Queue;
-
 import javax.realtime.RealtimeThread;
 
 import com.aeh.AEHHolder;
@@ -41,7 +39,9 @@ public class ServerThreadImpl extends RealtimeThread{
 		return aeHandler.getPriority();
 	}
 	
-	public void next(){
+	
+	// Thread always goes to pool
+	public void next1(){
 		
 		aehHolder.getLockUtil().getPQAndTPLock();
 //		System.out.println("PQ = "+aehHolder.getpQueue().toString());
@@ -57,35 +57,63 @@ public class ServerThreadImpl extends RealtimeThread{
 		PObject pObject = aehHolder.getPriorityObjects().get(hp);
 		synchronized (pObject.getDedicatedWatchDog()) {
 			pObject.getDedicatedWatchDog().notify();
-		}
-//		}
-			
-//			if(hp>aeHandler.getPriority()){
-//				System.out.println("There is a higher priority available ["+aeHandler.getPriority()+"]");
-//				addNewThreadToPool();
-//				aehHolder.getLockUtil().releasePQAndTPLock();
-//				//aehHolder.getPriorityObjects().get(hp).getDedicatedWatchDog().notify();
-//				pObject.getDedicatedWatchDog().notify();
-//				return;
-//			}
-//			else{
-//				addNewThreadToPool();
-//				aehHolder.getLockUtil().releasePQAndTPLock();
-//				//aehHolder.getPriorityObjects().get(hp).getDedicatedWatchDog().notify();
-//				pObject.getDedicatedWatchDog().notify();
-//				return;
-//			}
-//			else{
-//				System.out.println(hp+" -- There is no higher priority available ["+aeHandler.getPriority()+"]");	
-//				aehHolder.getpQueue().poll();
-//				Queue<AEHandler> q;
-//				if(!( q = aehHolder.getQueue(hp)).isEmpty()){
-//					this.bindHandler(q.poll(),false);
-//					aehHolder.getLockUtil().releasePQAndTPLock();
-//				}
-//			}
+		}	
+	}
 	
-			//this.executeHandler();	
+	
+	// Thread goes to pool if higher priority  handler available
+	public void next(){
+		aehHolder.getLockUtil().getPQAndTPLock();
+		int hp;
+		if(aehHolder.getpQueue().isEmpty()){
+			addNewThreadToPool();
+			aehHolder.getLockUtil().releasePQAndTPLock();
+			return;
+		}
+		hp = aehHolder.getpQueue().peek();
+		if(hp>this.getPriority()){
+			// go back to pool
+			addNewThreadToPool();
+			aehHolder.getLockUtil().releasePQAndTPLock();
+			PObject pObject = aehHolder.getPriorityObjects().get(hp);
+			synchronized (pObject.getDedicatedWatchDog()) {
+				pObject.getDedicatedWatchDog().notify();
+			}
+		}
+		else{
+			AEHandler h;
+			PObject pObject = aehHolder.getPriorityObjects().get(hp);
+			aehHolder.getLockUtil().releasePQAndTPLock();
+			synchronized (pObject.getDedicatedWatchDog()) {
+				aehHolder.getLockUtil().getPQAndTPLock();
+				h = findHandler(hp);
+				aehHolder.getLockUtil().releasePQAndTPLock();
+				pObject.getDedicatedWatchDog().notify();
+			}
+			if(h!=null){
+				bindHandler(h,false);
+				executeHandler();
+			}
+			else{
+				synchronized (pObject.getDedicatedWatchDog()) {
+					aehHolder.getLockUtil().getPQAndTPLock();
+					addNewThreadToPool();
+					aehHolder.getLockUtil().releasePQAndTPLock();
+					pObject.getDedicatedWatchDog().notify();
+				}
+			}
+		}
+		
+		
+	}
+	
+	public AEHandler findHandler(int p){
+		Queue<AEHandler> q;
+		if(!( q = aehHolder.getQueue(p)).isEmpty()){
+			aehHolder.getpQueue().poll();
+			return q.poll();
+		}
+		return null;
 	}
 	
 	public void addNewThreadToPool(){

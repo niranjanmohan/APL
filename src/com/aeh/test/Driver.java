@@ -1,12 +1,8 @@
 package com.aeh.test;
 
-import javax.realtime.NoHeapRealtimeThread;
-
 import com.aeh.AEHHolder;
 import com.aeh.thread.AEHandler;
 import com.aeh.thread.impl.AEHandlerImpl;
-import com.aeh.thread.impl.DedicatedWatchDogImpl;
-import com.aeh.thread.impl.ServerThreadImpl;
 import com.aeh.commonobjects.AsyncEventWrapper;
 
 public class Driver {
@@ -26,7 +22,7 @@ public class Driver {
 //			event2.addHandler(handler);
 //		}
 		
-		for(int i =0 ;i<10; i++){
+		for(int i =0 ;i<10000; i++){
 			AEHandler handler = new AEHandlerImpl("EX");
 			event1.addHandler(handler);
 		}

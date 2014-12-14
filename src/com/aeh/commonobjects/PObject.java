@@ -3,7 +3,6 @@ package com.aeh.commonobjects;
 //import java.util.concurrent.atomic.AtomicInteger;
 
 import com.aeh.AEHHolder;
-import com.aeh.thread.DedicatedWatchDog;
 import com.aeh.thread.impl.DedicatedThread;
 import com.aeh.thread.impl.DedicatedWatchDogImpl;
 

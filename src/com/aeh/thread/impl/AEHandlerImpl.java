@@ -1,8 +1,5 @@
 package com.aeh.thread.impl;
 
-import java.util.Date;
-
-import com.aeh.AEHHolder;
 import com.aeh.thread.AEHandler;
 
 public class AEHandlerImpl implements AEHandler {
