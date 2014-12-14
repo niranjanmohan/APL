@@ -28,8 +28,8 @@ public class ServerThreadImpl extends RealtimeThread{
 	}
 	
 	public void executeHandler() {
-		System.out.println("Executing {{"+aeHandler.getPriority()+"}}");
-		//aeHandler.handlerLogic();
+		//System.out.println("Executing {{"+aeHandler.getPriority()+"}}");
+		aeHandler.handlerLogic();
 		next();
 	}
 

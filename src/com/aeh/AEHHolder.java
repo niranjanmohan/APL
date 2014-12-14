@@ -71,7 +71,6 @@ public class AEHHolder {
 			watchDog.start();
 //			pobject.setDedicatedWatchDog(dedicatedWatchDog);
 			
-			
 			// initilize handlerQueues list
 			Queue<AEHandler> q = new LinkedList<AEHandler>();
 			handlerQueues.add(q);

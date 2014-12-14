@@ -1,10 +1,14 @@
 package com.aeh.thread.impl;
 
+import java.util.Date;
+
+import com.aeh.AEHHolder;
 import com.aeh.thread.AEHandler;
 
 public class AEHandlerImpl implements AEHandler {
 	private int priority;
 	private String desc;
+	private long firetime;
 	
 //	public AEHandlerImpl(int p){
 //		priority = p;
@@ -16,7 +20,8 @@ public class AEHandlerImpl implements AEHandler {
 	
 	@Override
 	public void handlerLogic(){
-		System.out.println(desc+" with priority = "+priority);
+		long avg = (System.nanoTime() - firetime)/1000;
+		System.out.println(desc+"["+priority+"] {"+avg+"}");
 	}
 
 	@Override
@@ -27,6 +32,11 @@ public class AEHandlerImpl implements AEHandler {
 	@Override
 	public int getPriority(){
 		return priority;
+	}
+	
+	@Override
+	public void setFiretime(long firetime){
+		this.firetime = firetime;
 	}
 
 }

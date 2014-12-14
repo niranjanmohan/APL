@@ -1,6 +1,7 @@
 package com.aeh.commonobjects;
 
 import com.aeh.thread.AEHandler;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -46,7 +47,9 @@ public class AsyncEventWrapper  extends AsyncEvent{
 	
 	
 	public void fire(){
-		//System.out.println("called file enque handlers");
+		for(int i =0 ;i<handlers.size();i++){
+			handlers.get(i).setFiretime(System.nanoTime());
+		}
 		enqueueHandler();
 		//here we have to enqueue update count 
 		//System.out.println("finifhed enqueue handler");

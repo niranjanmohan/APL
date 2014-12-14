@@ -12,42 +12,29 @@ import com.aeh.commonobjects.AsyncEventWrapper;
 public class Driver {
 	public static void main(String []args){
 		AEHHolder h = new AEHHolder(3,4,false);
-		AsyncEventWrapper event4 = new AsyncEventWrapper(3, h);
-		AsyncEventWrapper event3 = new AsyncEventWrapper(2, h);
-		AsyncEventWrapper event2 = new AsyncEventWrapper(1, h);
-		AEHandler handler1 = new AEHandlerImpl("i will do this");
-		AEHandler handler2 = new AEHandlerImpl("i will do this");
-		AEHandler handler3 = new AEHandlerImpl("i will do this");
-		AEHandler handler4 = new AEHandlerImpl("i will do this");
-		AEHandler handler5 = new AEHandlerImpl("i will do this");
-		AEHandler handler6 = new AEHandlerImpl("i will do this");
-		AEHandler handler7 = new AEHandlerImpl("i will do this");
-		AEHandler handler8= new AEHandlerImpl("i will do this");
-		AEHandler handler9 = new AEHandlerImpl("i will do this");
-		AEHandler handler10 = new AEHandlerImpl("i will do this");
-		AEHandler handler11 = new AEHandlerImpl("i will do this");
-		AEHandler handler12 = new AEHandlerImpl("i will do this");
-		AEHandler handler13 = new AEHandlerImpl("i will do this");
-		AEHandler handler14 = new AEHandlerImpl("i will do this");
-		AEHandler handler15 = new AEHandlerImpl("i will do this");
-		event4.addHandler(handler3);
-		event4.addHandler(handler6);
-		event4.addHandler(handler7);
-		event4.addHandler(handler8);
-		event4.addHandler(handler9);
-		event3.addHandler(handler1);
-		event3.addHandler(handler2);
-		event2.addHandler(handler4);
-		event2.addHandler(handler5);
-		event2.addHandler(handler10);
-		event2.addHandler(handler11);
-		event2.addHandler(handler12);
-		event3.addHandler(handler13);
-		event3.addHandler(handler14);
-		event3.addHandler(handler15);
-		event2.fire();
+		AsyncEventWrapper event3 = new AsyncEventWrapper(3, h);
+		//AsyncEventWrapper event2 = new AsyncEventWrapper(2, h);
+		AsyncEventWrapper event1 = new AsyncEventWrapper(1, h);
+		
+		for(int i =0 ;i<10; i++){
+			AEHandler handler = new AEHandlerImpl("***Executing");
+			event3.addHandler(handler);
+		}
+		
+//		for(int i =0 ;i<10; i++){
+//			AEHandler handler = new AEHandlerImpl("i will do this");
+//			event2.addHandler(handler);
+//		}
+		
+		for(int i =0 ;i<10; i++){
+			AEHandler handler = new AEHandlerImpl("EX");
+			event1.addHandler(handler);
+		}
+		
+		
+		event1.fire();
+		//event2.fire();
 		event3.fire();
-		event4.fire();
 		
 		
 		
