@@ -1,0 +1,13 @@
+Requirements : 
+- FIJIVM compiler in path
+- Java compiler 
+- RTSJ jar files 
+
+Running instructions:
+- Export the src files as a JAR using eclipse with RTSJ Jars in the build library
+- compile with the command 
+	fivmc -m com/aeh/test/Driver -o Driver /path/to/JAR.jar /path/to/fivm/lib/rtsj.jar
+	( This will generate the build )
+- execute with command
+	./Driver
+	

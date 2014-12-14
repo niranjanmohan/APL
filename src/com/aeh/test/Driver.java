@@ -17,13 +17,13 @@ public class Driver {
 			event3.addHandler(handler);
 		}
 		
-//		for(int i =0 ;i<10; i++){
-//			AEHandler handler = new AEHandlerImpl("i will do this");
+//		for(int i =0 ;i<20; i++){
+//			AEHandler handler = new AEHandlerImpl("**Executing");
 //			event2.addHandler(handler);
 //		}
 		
-		for(int i =0 ;i<10000; i++){
-			AEHandler handler = new AEHandlerImpl("EX");
+		for(int i =0 ;i<100000; i++){
+			AEHandler handler = new AEHandlerImpl("*Executing");
 			event1.addHandler(handler);
 		}
 		
@@ -31,23 +31,6 @@ public class Driver {
 		event1.fire();
 		//event2.fire();
 		event3.fire();
-		
-		
-		
-		
-//		
-//		RThread rr = new RThread();
-//		rr.setPriority(0);
-//		rr.start();
-		
-		
-		
-//		ServerThreadImpl t1 = new ServerThreadImpl();
-//		ServerThreadImpl t2 = new ServerThreadImpl();
-//		t1.bindHandler(handler1);
-//		t2.bindHandler(handler2);
-//		t1.executeHandler();
-//		t2.executeHandler();
 		
 	}
 
