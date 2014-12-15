@@ -26,6 +26,8 @@ public class AEHHolder {
 	int priorityCount;
 	int serverThreadCount;
 	public boolean useDedicatedThread = true;
+	public ArrayList<Integer> countHandlers;
+	public ArrayList<Integer> responseTime;
 	
 
 //	public AEHHolder(){
@@ -52,6 +54,16 @@ public class AEHHolder {
 	
 		// initialize lock utility
 		lockUtil = new AEHLockUtility(priorityCount);
+		
+		// initializing arraylist's for computing avg response time
+		
+		countHandlers = new ArrayList<Integer>();
+		responseTime = new ArrayList<Integer>();
+		
+		for(int i =0;i<priorityCount;i++){
+		  countHandlers.add(0);
+		  responseTime.add(0);
+		}
 		
 		initialize();
 //		System.out.println("finished creating object");
