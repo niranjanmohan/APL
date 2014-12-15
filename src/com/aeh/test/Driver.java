@@ -7,22 +7,22 @@ import com.aeh.commonobjects.AsyncEventWrapper;
 
 public class Driver {
 	public static void main(String []args){
-		AEHHolder h = new AEHHolder(100,4,false);
+		AEHHolder h = new AEHHolder(20,4,false);
 		AsyncEventWrapper event3 = new AsyncEventWrapper(3, h);
 		AsyncEventWrapper event2 = new AsyncEventWrapper(2, h);
 		AsyncEventWrapper event1 = new AsyncEventWrapper(1, h);
 		
-		for(int i =0 ;i<10; i++){
+		for(int i =0 ;i<100; i++){
 			AEHandler handler = new AEHandlerImpl("Executing");
 			event3.addHandler(handler);
 		}
 		
-		for(int i =0 ;i<10; i++){
+		for(int i =0 ;i<100; i++){
 			AEHandler handler = new AEHandlerImpl("Executing");
 			event2.addHandler(handler);
 		}
 		
-		for(int i =0 ;i<10; i++){
+		for(int i =0 ;i<100; i++){
 			AEHandler handler = new AEHandlerImpl("Executing");
 			event1.addHandler(handler);
 		}

@@ -28,7 +28,7 @@ public class ServerThreadImpl extends RealtimeThread{
 	public void executeHandler() {
 		//System.out.println("Executing {{"+aeHandler.getPriority()+"}}");
 		aeHandler.handlerLogic();
-		next();
+		next1();
 	}
 
 	public void setThreadPriority(int priority) {
